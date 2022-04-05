@@ -9,7 +9,7 @@ app = Flask(__name__)
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
 
-
+app.config['SERVER_NAME']='localhost:5000'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = os.environ.get("Mysql_user")
 app.config['MYSQL_PASSWORD'] = os.environ.get("Mysql_pass")
@@ -24,7 +24,7 @@ def home():
     return "<h1>Project Setup</h1>"
 
 
-@app.route('/patientRegister', methods=['GET','POST'])
+@app.route('/patientRegister' , methods=['GET','POST'])
 def patientRegister():
     if request.method == 'POST':
         name = request.form['name']
@@ -58,11 +58,7 @@ def patientRegister():
         
     return render_template('Register.html')
 
-@app.route('/logout')
-def logout():
-    if 'user' in session:
-        session.pop('user')
-        return redirect('/')
-    return redirect('/patientLogin')
+
+
 
 app.run(debug=True, host='0.0.0.0')
