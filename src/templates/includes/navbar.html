@@ -1,0 +1,16 @@
+<nav>
+    <h1>
+        Title
+    </h1>
+    {% if 'user' in session %}
+    <div class="navlinks">
+        <a href="#">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </div>
+    {% else %}
+    <div class="navlinks">
+        <a href="/patientLogin">Login</a>
+        <a href="/patientRegister">Register</a>
+    </div>
+    {% endif %}
+</nav>

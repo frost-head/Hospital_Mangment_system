@@ -1,0 +1,29 @@
+<!-- head -->
+{% extends 'Base.html' %} {% block head %}
+<title>
+    Patient Login
+</title>
+
+{% endblock %}
+<!-- body -->
+{% block body %}
+<div class="forms">
+    <h2>
+        Login
+    </h2>
+    <hr>
+    <p>
+        Lables Followed by '*' are required to fill
+    </p>
+    <form method="post">
+
+        <label for="email">Email *</label>
+        <input type="email" name="email" required>
+
+        <label for="password">Password *</label>
+        <input type="password" name="password" required>
+
+        <input type="submit" value="Login">
+    </form>
+</div>
+{% endblock %}

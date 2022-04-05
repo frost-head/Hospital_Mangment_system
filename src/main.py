@@ -86,7 +86,8 @@ def patientRegister():
         uid = fetchone(
             mysql, "select pid from patient where email = '{}'".format(email))
         if uid:
-            session['user'] = uid
+            session['user'] = uid['pid']
+            print(uid)
         return redirect('/')
 
     return render_template('Register.html')
