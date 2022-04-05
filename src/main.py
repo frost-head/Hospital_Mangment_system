@@ -10,7 +10,7 @@ app = Flask(__name__)
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
 
-
+app.config['SERVER_NAME']='localhost:5000'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'YOUR_USERNAME_HERE'
 app.config['MYSQL_PASSWORD'] = 'YOUR_PASSWORD_HERE'
@@ -25,35 +25,10 @@ def home():
     return "<h1>Project Setup</h1>"
 
 
-@app.route('/patientLogin', methods=['GET', 'POST'])
-def patientlogin():
-    if 'user' in session:
-        flash('Already loged in', 'danger')
-        return redirect('/')
-
-    if request.method == 'POST':
-        email = request.form['email']
-        passcode = request.form['password']
-        data = fetchone(
-            mysql, "select pid, password from patient where email = '{}'".format(email))
-
-        if data:
-            password = data['password']
-            uid = data['pid']
-
-            if bcrypt.check_password_hash(password, passcode):
-                session['user'] = uid
-                flash('Successfully logged in', 'success')
-                return redirect('/')
-            else:
-                flash('Invalid Password', 'danger')
-        else:
-            flash('User not Found', 'danger')
-
-    return render_template('Login.html')
 
 
-@app.route('/patientRegister', methods=['GET', 'POST'])
+
+
 def patientRegister():
     if request.method == 'POST':
         name = request.form['name']
@@ -89,6 +64,5 @@ def patientRegister():
         return redirect('/')
 
     return render_template('Register.html')
-
 
 app.run(debug=True, host='0.0.0.0')
