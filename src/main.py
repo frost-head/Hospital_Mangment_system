@@ -1,4 +1,5 @@
-from flask import Flask, redirect, render_template, request, session
+from hashlib import sha256, sha3_256
+from flask import Flask, redirect, render_template, request, flash, session
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import os
@@ -24,13 +25,44 @@ def home():
     return "<h1>Project Setup</h1>"
 
 
-@app.route('/patientRegister', methods=['GET','POST'])
+@app.route('/patientLogin', mwthods=['GET', 'POST'])
+def patientlogin():
+    if 'user' in session:
+        flash('Already loged in','danger')
+        return redirect('/')
+    
+    if request.method == 'POST':
+        email = request.form['Email']
+        passcode = request.form['Password']
+        data = fetchone(mysql,"select pid, password from patient where email = %s",[email])
+        
+        if data:
+            password = data['password']
+            uid = data['pid']
+
+            if bcrypt.check_password_hash(passcode,password):
+                password = data['password']
+                uid = data['pid']
+                if bcrypt.check_password_hash(passcode,password):
+                    session['user'] = uid
+                    flash('Successfully logged in', 'success')
+                    return redirect('/')
+                else:
+                    flash('Invalid input', 'danger')
+            else:
+                flash('User not Found','danger')
+
+    return render_template('Login.html')
+
+
+@app.route('/patientRegister', methods=['GET', 'POST'])
 def patientRegister():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
         age = request.form['age']
-        mailtest = fetchone(mysql, "select pid from patient where email = '{}'".format(email))
+        mailtest = fetchone(
+            mysql, "select pid from patient where email = '{}'".format(email))
         if mailtest:
             return "Email already registrer"
         password = request.form['password']
@@ -48,13 +80,16 @@ def patientRegister():
         else:
             address = 'N/A'
 
-        insert(mysql, "insert into patient(name, email, password, blood_group, father_name,address, age) values('{}', '{}','{}','{}','{}','{}','{}')".format(name, email, pw_hash, bloodG, fatherN, address, age))
-        
-        uid = fetchone(mysql, "select pid from patient where email = '{}'".format(email))
+        insert(mysql, "insert into patient(name, email, password, blood_group, father_name,address, age) values('{}', '{}','{}','{}','{}','{}','{}')".format(
+            name, email, pw_hash, bloodG, fatherN, address, age))
+
+        uid = fetchone(
+            mysql, "select pid from patient where email = '{}'".format(email))
         if uid:
             session['user'] = uid
         return redirect('/')
-        
+
     return render_template('Register.html')
+
 
 app.run(debug=True, host='0.0.0.0')
