@@ -1,4 +1,3 @@
-from hashlib import sha256, sha3_256
 from flask import Flask, redirect, render_template, request, flash, session
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
@@ -10,10 +9,10 @@ app = Flask(__name__)
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
 
-app.config['SERVER_NAME']='localhost:5000'
+app.config['SERVER_NAME'] = 'localhost:5000'
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'YOUR_USERNAME_HERE'
-app.config['MYSQL_PASSWORD'] = 'YOUR_PASSWORD_HERE'
+# app.config['MYSQL_USER'] = 'YOUR_USERNAME_HERE'
+# app.config['MYSQL_PASSWORD'] = 'YOUR_PASSWORD_HERE'
 app.config['MYSQL_DB'] = 'hospital'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -25,7 +24,38 @@ def home():
     return "<h1>Project Setup</h1>"
 
 
-@app.route('/patientRegister', methods=['GET','PODT'])
+@app.route('/patientLogin', methods=['GET', 'POST'])
+def patientlogin():
+    if 'user' in session:
+        flash('Already loged in', 'danger')
+        return redirect('/')
+
+    if request.method == 'POST':
+        email = request.form['email']
+        passcode = request.form['password']
+        data = fetchone(
+            mysql, "select pid, password from patient where email = '{}'".format(email))
+
+        if data:
+            password = data['password']
+            uid = data['pid']
+
+            if bcrypt.check_password_hash(password, passcode):
+                password = data['password']
+                uid = data['pid']
+
+                session['user'] = uid
+                flash('Successfully logged in', 'success')
+                return redirect('/')
+            else:
+                flash('Invalid Password', 'danger')
+        else:
+            flash('User not Found', 'danger')
+
+    return render_template('Login.html')
+
+
+@app.route('/patientRegister', methods=['GET', 'PODT'])
 def patientRegister():
     if request.method == 'POST':
         name = request.form['name']
@@ -62,11 +92,13 @@ def patientRegister():
 
     return render_template('Register.html')
 
+
 @app.route('/logout')
 def logout():
     if 'user' in session:
         session.pop('user')
         return redirect('/')
     return redirect('/patientLogin')
+
 
 app.run(debug=True, host='0.0.0.0')
