@@ -12,9 +12,9 @@ bcrypt = Bcrypt(app)
 
 
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = os.environ.get("Mysql_user")
-app.config['MYSQL_PASSWORD'] = os.environ.get("Mysql_pass")
-app.config['MYSQL_DB'] = 'hospital_managment'
+app.config['MYSQL_USER'] = 'YOUR_USERNAME_HERE'
+app.config['MYSQL_PASSWORD'] = 'YOUR_PASSWORD_HERE'
+app.config['MYSQL_DB'] = 'hospital'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = os.urandom(24)
@@ -25,32 +25,31 @@ def home():
     return "<h1>Project Setup</h1>"
 
 
-@app.route('/patientLogin', mwthods=['GET', 'POST'])
+@app.route('/patientLogin', methods=['GET', 'POST'])
 def patientlogin():
     if 'user' in session:
-        flash('Already loged in','danger')
+        flash('Already loged in', 'danger')
         return redirect('/')
-    
+
     if request.method == 'POST':
-        email = request.form['Email']
-        passcode = request.form['Password']
-        data = fetchone(mysql,"select pid, password from patient where email = %s",[email])
-        
+        email = request.form['email']
+        passcode = request.form['password']
+        data = fetchone(
+            mysql, "select pid, password from patient where email = '{}'".format(email))
+
         if data:
             password = data['password']
             uid = data['pid']
 
-            if bcrypt.check_password_hash(passcode,password):
+            if bcrypt.check_password_hash(password, passcode):
                 password = data['password']
                 uid = data['pid']
-                if bcrypt.check_password_hash(passcode,password):
-                    session['user'] = uid
-                    flash('Successfully logged in', 'success')
-                    return redirect('/')
-                else:
-                    flash('Invalid input', 'danger')
+                session['user'] = uid
+                flash('Successfully logged in', 'success')
+                return redirect('/')
+
             else:
-                flash('User not Found','danger')
+                flash('User not Found', 'danger')
 
     return render_template('Login.html')
 
