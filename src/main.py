@@ -25,10 +25,7 @@ def home():
     return "<h1>Project Setup</h1>"
 
 
-
-
-
-
+@app.route('/patientRegister', methods=['GET','PODT'])
 def patientRegister():
     if request.method == 'POST':
         name = request.form['name']
@@ -64,5 +61,12 @@ def patientRegister():
         return redirect('/')
 
     return render_template('Register.html')
+
+@app.route('/logout')
+def logout():
+    if 'user' in session:
+        session.pop('user')
+        return redirect('/')
+    return redirect('/patientLogin')
 
 app.run(debug=True, host='0.0.0.0')
