@@ -1,5 +1,7 @@
-from flask import Flask, render_template
+from crypt import methods
+from flask import Flask, render_template, request
 from flask_mysqldb import MySQL
+from flask_bcrypt import bcrypt
 import os
 from database import *
 
@@ -21,5 +23,11 @@ app.secret_key = os.urandom(24)
 def home():
     return "<h1>Project Setup</h1>"
 
+
+@app.route('/patientRegister', methods=['GET','POST'])
+def patientRegister():
+
+        
+    return render_template('Register.html')
 
 app.run(debug=True, host='0.0.0.0')
