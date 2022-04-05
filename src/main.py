@@ -58,4 +58,11 @@ def patientRegister():
         
     return render_template('Register.html')
 
+@app.route('/logout')
+def logout():
+    if 'user' in session:
+        session.pop('user')
+        return redirect('/')
+    return redirect('/patientLogin')
+
 app.run(debug=True, host='0.0.0.0')
