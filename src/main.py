@@ -12,8 +12,6 @@ bcrypt = Bcrypt(app)
 
 
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'YOUR_USERNAME_HERE'
-app.config['MYSQL_PASSWORD'] = 'YOUR_PASSWORD_HERE'
 app.config['MYSQL_DB'] = 'hospital'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -90,5 +88,19 @@ def patientRegister():
 
     return render_template('Register.html')
 
+
+<< << << < HEAD
+== == == =
+
+
+@app.route('/logout')
+def logout():
+    if 'user' in session:
+        session.pop('user')
+        return redirect('/')
+    return redirect('/patientLogin')
+
+
+>>>>>> > 49bc0f54ce9f260d6080c46ef6494a6fdcaad5f9
 
 app.run(debug=True, host='0.0.0.0')
