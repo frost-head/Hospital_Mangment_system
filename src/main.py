@@ -42,14 +42,13 @@ def patientlogin():
             uid = data['pid']
 
             if bcrypt.check_password_hash(password, passcode):
-                password = data['password']
-                uid = data['pid']
                 session['user'] = uid
                 flash('Successfully logged in', 'success')
                 return redirect('/')
-
             else:
-                flash('User not Found', 'danger')
+                flash('Invalid Password', 'danger')
+        else:
+            flash('User not Found', 'danger')
 
     return render_template('Login.html')
 
