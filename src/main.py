@@ -10,7 +10,7 @@ app = Flask(__name__)
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
 
-
+app.config['SERVER_NAME']='localhost:5000'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_DB'] = 'hospital'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -23,6 +23,7 @@ def home():
     return "<h1>Project Setup</h1>"
 
 
+<<<<<<< HEAD
 @app.route('/patientLogin', methods=['GET', 'POST'])
 def patientlogin():
     if 'user' in session:
@@ -52,6 +53,9 @@ def patientlogin():
 
 
 @app.route('/patientRegister', methods=['GET', 'POST'])
+=======
+@app.route('/patientRegister' , methods=['GET','POST'])
+>>>>>>> 89677af9b10abc9653449af8226cd047e0baeffb
 def patientRegister():
     if request.method == 'POST':
         name = request.form['name']
@@ -89,6 +93,7 @@ def patientRegister():
     return render_template('Register.html')
 
 
+<<<<<<< HEAD
 << << << < HEAD
 == == == =
 
@@ -99,6 +104,9 @@ def logout():
         session.pop('user')
         return redirect('/')
     return redirect('/patientLogin')
+=======
+
+>>>>>>> 89677af9b10abc9653449af8226cd047e0baeffb
 
 
 >>>>>> > 49bc0f54ce9f260d6080c46ef6494a6fdcaad5f9
