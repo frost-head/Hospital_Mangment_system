@@ -11,9 +11,9 @@ bcrypt = Bcrypt(app)
 
 app.config['SERVER_NAME'] = 'localhost:5000'
 app.config['MYSQL_HOST'] = 'localhost'
-# app.config['MYSQL_USER'] = 'YOUR_USERNAME_HERE'
-# app.config['MYSQL_PASSWORD'] = 'YOUR_PASSWORD_HERE'
-app.config['MYSQL_DB'] = 'hospital'
+app.config['MYSQL_USER'] = os.environ.get("Mysql_user")
+app.config['MYSQL_PASSWORD'] = os.environ.get("Mysql_pass")
+app.config['MYSQL_DB'] = 'hospital_managment'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = os.urandom(24)
@@ -100,5 +100,35 @@ def logout():
         return redirect('/')
     return redirect('/patientLogin')
 
+
+@app.route('/staffRegister', subdomain='staff', methods=['GET','POST'])
+def staffRegister():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        desg = request.form['desg']
+        mailtest = fetchone(
+            mysql, "select sid from staff where email = '{}'".format(email))
+        if mailtest:
+            return "Email already registrer"
+        password = request.form['password']
+        pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+        number = request.form['number']
+        if request.form['address']:
+            address = request.form['address']
+        else:
+            address = 'N/A'
+
+        insert(mysql, "insert into staff(name, email, password, number, address, desg) values('{}', '{}','{}','{}','{}','{}')".format(
+            name, email, pw_hash,number, address, desg))
+
+        uid = fetchone(
+            mysql, "select pid from patient where email = '{}'".format(email))
+        if uid:
+            session['user'] = uid['pid']
+            print(uid)
+        return redirect('/')
+
+    return render_template('StaffRegister.html')
 
 app.run(debug=True, host='0.0.0.0')
