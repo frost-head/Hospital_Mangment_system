@@ -131,4 +131,35 @@ def staffRegister():
 
     return render_template('StaffRegister.html')
 
+@app.route('/staffLogin', subdomain='staff' ,methods=['GET', 'POST'])
+def stafflogin():
+    if 'user' in session:
+        flash('Already loged in', 'danger')
+        return redirect('/')
+
+    if request.method == 'POST':
+        email = request.form['email']
+        passcode = request.form['password']
+        data = fetchone(
+            mysql, "select pid, password from patient where email = '{}'".format(email))
+
+        if data:
+            password = data['password']
+            uid = data['pid']
+
+            if bcrypt.check_password_hash(password, passcode):
+                password = data['password']
+                uid = data['pid']
+
+                session['user'] = uid
+                flash('Successfully logged in', 'success')
+                return redirect('/')
+            else:
+                flash('Invalid Password', 'danger')
+        else:
+            flash('User not Found', 'danger')
+
+    return render_template('Login.html')
+
+
 app.run(debug=True, host='0.0.0.0')
