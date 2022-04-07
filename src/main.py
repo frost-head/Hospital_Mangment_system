@@ -135,7 +135,7 @@ def staffRegister():
 def stafflogin():
     if 'user' in session:
         flash('Already loged in', 'danger')
-        return redirect('/')
+        return redirect('/staffDashboard')
 
     if request.method == 'POST':
         email = request.form['email']
@@ -145,19 +145,14 @@ def stafflogin():
 
         if data:
             password = data['password']
-            uid = data['pid']
-
-            if bcrypt.check_password_hash(password, passcode):
-                password = data['password']
-                uid = data['pid']
-
-                session['user'] = uid
-                flash('Successfully logged in', 'success')
-                return redirect('/')
-            else:
-                flash('Invalid Password', 'danger')
+            uid = data['sid']
+            session['user'] = uid
+            flash('Successfully logged in', 'success')
+            return redirect('/staffDashboard')
         else:
-            flash('User not Found', 'danger')
+            flash('Invalid Password', 'danger')
+    else:
+        flash('User not Found', 'danger')
 
     return render_template('staffLogin.html')
 
@@ -169,10 +164,11 @@ def stafflogout():
     if 'user' not in session:
         return redirect('/staffLogin')
 
-@app.route('/staffDashboard', subdomain="staff", methods=['GET','POST'])
+@app.route('/staffDashboard', subdomain="staff")
 def staffDashboard():
     if 'user' not in session:
-        return redirect("/")
-    return render_template('StaffDashboard.html')
+        return redirect("/staffLogin")
+    data = fetchone(mysql, "select * from staff where sid = {}".format(session['user']))
+    return render_template('staffDashboard.html', data=data)
 
 app.run(debug=True, host='0.0.0.0')

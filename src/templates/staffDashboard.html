@@ -1,0 +1,29 @@
+<!-- head -->
+{% extends 'staffBase.html' %} {% block head %}
+<title>
+    Patient Register
+</title>
+
+{% endblock %}
+<!-- body -->
+{% block body %}
+<div class="forms">
+    <h2>
+        Hey, {{data['name']}}
+    </h2>
+    <hr>
+    <p>
+        Your current information
+    </p>
+    <p>
+        Designation :- {{data['desg']}}
+    </p>
+    <p>
+        Address :- {{data['address']}}
+    </p>
+    <p>
+        Phone Number :- {{data['number']}}
+    </p>
+
+</div>
+{% endblock %}
