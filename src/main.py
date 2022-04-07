@@ -21,7 +21,7 @@ app.secret_key = os.urandom(24)
 
 @app.route('/')
 def home():
-    return "<h1>Project Setup</h1>"
+    return render_template('Home.html')
 
 
 @app.route('/patientLogin', methods=['GET', 'POST'])
@@ -123,9 +123,9 @@ def staffRegister():
             name, email, pw_hash,number, address, desg))
 
         uid = fetchone(
-            mysql, "select pid from patient where email = '{}'".format(email))
+            mysql, "select sid from staff where email = '{}'".format(email))
         if uid:
-            session['user'] = uid['pid']
+            session['user'] = uid['sid']
             print(uid)
         return redirect('/')
 
@@ -141,7 +141,7 @@ def stafflogin():
         email = request.form['email']
         passcode = request.form['password']
         data = fetchone(
-            mysql, "select pid, password from patient where email = '{}'".format(email))
+            mysql, "select sid, password from staff where email = '{}'".format(email))
 
         if data:
             password = data['password']
@@ -159,7 +159,20 @@ def stafflogin():
         else:
             flash('User not Found', 'danger')
 
-    return render_template('Login.html')
+    return render_template('staffLogin.html')
 
+@app.route('/logout', subdomain='staff')
+def stafflogout():
+    if 'user' in session:
+        session.pop('user')
+        return redirect('/')
+    if 'user' not in session:
+        return redirect('/staffLogin')
+
+@app.route('/staffDashboard', subdomain="staff", methods=['GET','POST'])
+def staffDashboard():
+    if 'user' not in session:
+        return redirect("/")
+    return render_template('StaffDashboard.html')
 
 app.run(debug=True, host='0.0.0.0')

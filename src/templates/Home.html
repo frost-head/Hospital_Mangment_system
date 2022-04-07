@@ -1,20 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PreAns</title>
-</head>
-<body>
-    <form>
-        <label id="name-label" for="email">Name</label>
-        <input type="text" name="name" ><br>
-        <label id="email-label" for="email">Email</label>
-        <input type="email" name="email" id="email" class="form-control" placeholder="Enter your Email" required=""><br>
-        <label id="email-label" for="email">Age</label>
-        <input type="number" name="age" id="number" min="10" max="99" class="form-control" placeholder="Age">
-        
-    </form>
-</body>
-</html>
+<!-- head -->
+{% extends 'Base.html' %} {% block head %}
+<title>
+    Home
+</title>
+
+{% endblock %}
+<!-- body -->
+{% block body %}
+<div class="home">
+    <h1>
+        Home page
+
+    </h1>
+</div>
+{% endblock %}
