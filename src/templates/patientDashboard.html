@@ -1,0 +1,33 @@
+<!-- head -->
+{% extends 'Base.html' %} {% block head %}
+<title>
+    Patient Register
+</title>
+
+{% endblock %}
+<!-- body -->
+{% block body %}
+<div class="forms">
+    <h2>
+        Hey, {{data['name']}}
+    </h2>
+    <hr>
+    <p>
+        Your current information
+    </p>
+    <p>
+        Age :- {{data['Age']}}
+    </p>
+    <p>
+        Address :- {{data['address']}}
+    </p>
+    <p>
+        Blood Group :- {{data['blood_group']}}
+    </p>
+    <p>
+        Father Name :- {{data['father_name']}}
+    </p>
+
+
+</div>
+{% endblock %}

@@ -171,4 +171,11 @@ def staffDashboard():
     data = fetchone(mysql, "select * from staff where sid = {}".format(session['user']))
     return render_template('staffDashboard.html', data=data)
 
+@app.route('/patientDashboard')
+def patientDashboard():
+    if 'user' not in session:
+        return redirect("/patientLogin")
+    data = fetchone(mysql, "select * from staff where sid = {}".format(session['user']))
+    return render_template('patientDashboard.html',data=data)
+
 app.run(debug=True, host='0.0.0.0')
