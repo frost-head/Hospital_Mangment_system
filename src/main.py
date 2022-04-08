@@ -1,3 +1,4 @@
+import re
 from flask import Flask, redirect, render_template, request, flash, session
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
@@ -177,5 +178,22 @@ def patientDashboard():
         return redirect("/patientLogin")
     data = fetchone(mysql, "select * from staff where sid = {}".format(session['user']))
     return render_template('patientDashboard.html',data=data)
+
+@app.route('/staffAddVitals', subdomain='staff', methods=['GET', 'POST'])
+def staffAddVitals():
+    if 'user' not in session:
+        return redirect('/staffLogin')
+    if request.method == 'POST':
+        pid = request.form['pid']
+        temp = request.form['temp']
+        pulse = request.form['pulse']
+        bp = request.form['bp']
+        rr = request.form['rr']
+        spo2 = request.form['spo2']
+        weight = request.form['weight']
+        sid = session['user']
+        insert(mysql,"insert into vitals(pid, temp, pulse, blood_pressure, resp_rate, spo2, sid, weight) values({},{},{},{},{},{},{},{})".format(pid, temp, pulse, bp, rr, spo2, sid, weight))
+        return redirect('/staffDashboard')
+    return render_template('staffAddVitals.html')
 
 app.run(debug=True, host='0.0.0.0')

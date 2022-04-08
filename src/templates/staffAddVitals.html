@@ -1,0 +1,43 @@
+<!-- head -->
+{% extends 'staffBase.html' %} {% block head %}
+<title>
+    Patient Register
+</title>
+
+{% endblock %}
+<!-- body -->
+{% block body %}
+<div class="forms">
+    <h2>
+        Add Vitals
+    </h2>
+    <hr>
+    <p>
+        Lables Followed by '*' are required to fill
+    </p>
+    <form method="post">
+        <label for="pid">Patient Id *</label>
+        <input type="number" name="pid" required>
+
+        <label for="temp">Temprature *</label>
+        <input type="text" name="temp" required>
+
+        <label for="bp">Blood Pressure *</label>
+        <input type="text" name="bp" required>
+
+        <label for="rr">Respiratory Rate *</label>
+        <input type="text" name="rr" required>
+
+        <label for="spo2">SpO2 *</label>
+        <input type="text" name="spo2" required>
+
+        <label for="weight">Weight *</label>
+        <input type="text" name="weight" required>
+
+        <label for="pulse">pulse *</label>
+        <input type="text" name="pulse" required>
+
+        <input type="submit" value="Register">
+    </form>
+</div>
+{% endblock %}
