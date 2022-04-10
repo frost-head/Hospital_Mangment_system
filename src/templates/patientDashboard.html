@@ -9,28 +9,51 @@
 {% block body %}
 <div class="forms">
     <h2>
-        Hey, {{data['name']}}
+        Hey, {{patientData['name']}}
     </h2>
     <hr>
     <p>
         Your current information
     </p>
     <p>
-        Patient Id :- {{data['pid']}}
+        Patient Id :- {{patientData['pid']}}
     </p>
     <p>
-        Age :- {{data['Age']}}
+        Age :- {{patientData['age']}}
     </p>
     <p>
-        Address :- {{data['address']}}
+        Address :- {{patientData['address']}}
     </p>
     <p>
-        Blood Group :- {{data['blood_group']}}
+        Blood Group :- {{patientData['blood_group']}}
     </p>
     <p>
-        Father Name :- {{data['father_name']}}
+        Father Name :- {{patientData['father_name']}}
     </p>
-
-
+</div>
+<div class="vitals">
+    {% for vitalData in vitalsData %}
+    <p>
+        Your current information
+    </p>
+    <p>
+        Temprature :- {{vitalData['temp']}}
+    </p>
+    <p>
+        Pulse :- {{vitalData['pulse']}}
+    </p>
+    <p>
+        Blood Pressure :- {{vitalData['blood_pressure']}}
+    </p>
+    <p>
+        Respiratory Rate :- {{vitalData['resp_rate']}}
+    </p>
+    <p>
+        Blood Oxygen :- {{vitalData['spo2']}}
+    </p>
+    <p>
+        weight :- {{vitalData['weight']}}
+    </p>
+    {% endfor %}
 </div>
 {% endblock %}

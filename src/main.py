@@ -56,7 +56,7 @@ def patientlogin():
     return render_template('Login.html')
 
 
-@app.route('/patientRegister', methods=['GET', 'PODT'])
+@app.route('/patientRegister', methods=['GET', 'POST'])
 def patientRegister():
     if request.method == 'POST':
         name = request.form['name']
@@ -81,7 +81,7 @@ def patientRegister():
         else:
             address = 'N/A'
 
-        insert(mysql, "insert into patient(name, email, password, blood_group, father_name,address, age) values('{}', '{}','{}','{}','{}','{}','{}')".format(
+        insert(mysql, "insert into patient(name, email, password, blood_group, father_name,address, age) values('{}', '{}','{}','{}','{}','{}',{})".format(
             name, email, pw_hash, bloodG, fatherN, address, age))
 
         uid = fetchone(
@@ -176,8 +176,10 @@ def staffDashboard():
 def patientDashboard():
     if 'user' not in session:
         return redirect("/patientLogin")
-    data = fetchone(mysql, "select * from staff where sid = {}".format(session['user']))
-    return render_template('patientDashboard.html',data=data)
+    patientData = fetchone(mysql, "select * from patient where pid = {}".format(session['user']))
+    vitalsData = fetchall(mysql, "select * from vitals where pid = {}".format(session['user']))
+    print(vitalsData)
+    return render_template('patientDashboard.html',patientData=patientData, vitalsData=vitalsData)
 
 @app.route('/staffAddVitals', subdomain='staff', methods=['GET', 'POST'])
 def staffAddVitals():
