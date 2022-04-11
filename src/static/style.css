@@ -111,13 +111,15 @@ nav h1 {
 }
 
 .button {
-    padding: 5px 30px;
+    padding: 10px 30px;
     background-color: #D90429;
     color: #EDF2F4;
     border-radius: 50px;
     font-size: 1.5rem;
     margin: 10px;
     text-align: center;
+    border: 0px black;
+    transition: 0.5s;
 }
 
 .button:hover {
@@ -158,4 +160,53 @@ nav h1 {
     align-content: center;
     align-items: center;
     flex-wrap: wrap;
+}
+
+
+/* forms */
+
+.forms {
+    padding: 50px;
+    border-radius: 15px;
+    margin: 50px 0px;
+    box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.178);
+    width: 45vw;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    align-content: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+
+form label {
+    font-size: 1.8rem;
+}
+
+form input {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-left: 5px;
+}
+
+.required {
+    text-align: left;
+    color: #D90429;
+    margin-bottom: 50px;
+}
+
+.centerDiv {
+    display: flex;
+    justify-content: center;
+}
+
+form .button {
+    border-radius: 15px;
 }
