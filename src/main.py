@@ -1,5 +1,5 @@
 import re
-from flask import Flask, redirect, render_template, request, flash, session
+from flask import Flask, redirect, render_template, request, flash, session, url_for
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import os
@@ -10,7 +10,6 @@ app = Flask(__name__)
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
 
-app.config['SERVER_NAME'] = 'localhost:5000'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = os.environ.get("Mysql_user")
 app.config['MYSQL_PASSWORD'] = os.environ.get("Mysql_pass")
@@ -18,6 +17,8 @@ app.config['MYSQL_DB'] = 'hospital_managment'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = os.urandom(24)
+
+
 
 
 @app.route('/')
@@ -102,7 +103,7 @@ def logout():
     return redirect('/patientLogin')
 
 
-@app.route('/staffRegister', subdomain='staff', methods=['GET','POST'])
+@app.route('/staffRegister', methods=['GET','POST'])
 def staffRegister():
     if request.method == 'POST':
         name = request.form['name']
@@ -132,7 +133,7 @@ def staffRegister():
 
     return render_template('StaffRegister.html')
 
-@app.route('/staffLogin', subdomain='staff' ,methods=['GET', 'POST'])
+@app.route('/staffLogin' ,methods=['GET', 'POST'])
 def stafflogin():
     if 'user' in session:
         flash('Already loged in', 'danger')
@@ -157,7 +158,7 @@ def stafflogin():
 
     return render_template('staffLogin.html')
 
-@app.route('/logout', subdomain='staff')
+@app.route('/logout')
 def stafflogout():
     if 'user' in session:
         session.pop('user')
@@ -165,7 +166,7 @@ def stafflogout():
     if 'user' not in session:
         return redirect('/staffLogin')
 
-@app.route('/staffDashboard', subdomain="staff")
+@app.route('/staffDashboard')
 def staffDashboard():
     if 'user' not in session:
         return redirect("/staffLogin")
@@ -181,7 +182,7 @@ def patientDashboard():
     print(vitalsData)
     return render_template('patientDashboard.html',patientData=patientData, vitalsData=vitalsData)
 
-@app.route('/staffAddVitals', subdomain='staff', methods=['GET', 'POST'])
+@app.route('/staffAddVitals', methods=['GET', 'POST'])
 def staffAddVitals():
     if 'user' not in session:
         return redirect('/staffLogin')
@@ -197,5 +198,11 @@ def staffAddVitals():
         insert(mysql,"insert into vitals(pid, temp, pulse, blood_pressure, resp_rate, spo2, sid, weight) values({},{},{},{},{},{},{},{})".format(pid, temp, pulse, bp, rr, spo2, sid, weight))
         return redirect('/staffDashboard')
     return render_template('staffAddVitals.html')
+
+@app.route('/patient')
+def patient():
+    if 'user' in session:
+        return redirect("/patientDashboard")
+    return render_template("patient.html")
 
 app.run(debug=True, host='0.0.0.0')

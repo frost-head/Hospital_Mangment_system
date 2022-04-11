@@ -6,11 +6,33 @@
 
 {% endblock %}
 <!-- body -->
-{% block body %}
-<div class="home">
-    <h1>
-        Home page
+{% block bBody %}
+<div class="heroDiv">
+    <img class="homePageHero" src="/static/images/homePageHero.jpg" alt="">
 
-    </h1>
+    <div class="redTint">
+
+    </div>
+    <div class="heroText">
+        <h1>
+            We Are here at your service
+        </h1>
+        <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Mollitia facere repellat eveniet, dolorem sed voluptas veniam odit debitis velit aspernatur qui. Iure recusandae accusamus ad porro minima laboriosam. Quas quo id
+        </p>
+        <div class="heroButtons">
+            <a class="button" href="/staffLogin">Staff</a>
+            <a class="button" href="/patient">Patient</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %} {% block body %}
+<div class="features">
+    <!-- <section>
+        <h2>
+            Appointment Booking
+        </h2>
+    </section> -->
 </div>
 {% endblock %}

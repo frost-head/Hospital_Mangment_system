@@ -1,3 +1,138 @@
-.forms {
-    font-size: 15px;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    overflow-x: hidden;
+}
+
+h1 {
+    font-size: 4rem;
+}
+
+h2 {
+    font-size: 2.8rem;
+}
+
+h3 {
+    font-size: 1.8rem;
+}
+
+a {
+    text-decoration: none;
+    color: #2B2D42;
+    transition: 0.5s;
+}
+
+a:hover {
+    color: #D90429;
+}
+
+.body {
+    margin: 0px 150px;
+}
+
+
+/* navbar */
+
+nav {
+    display: flex;
+    height: 60px;
+    align-content: center;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 75px;
+    padding-right: 75px;
+    box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.178);
+}
+
+nav h1 {
+    font-size: 2.2rem;
+}
+
+.navlinks a {
+    padding: 10px;
+}
+
+.navlinks {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    align-content: center;
+}
+
+
+/* homepage */
+
+.homePageHero {
+    width: 100vw;
+    height: 85vh;
+    object-fit: cover;
+}
+
+.heroDiv {
+    position: relative;
+    box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.178);
+}
+
+.redTint {
+    width: 100vw;
+    height: 85vh;
+    background-color: #D90429;
+    opacity: 0.45;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.heroText {
+    width: 50vw;
+    height: 85vh;
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #EDF2F4;
+    margin: 0px 150px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.heroText p {
+    font-size: 1.3rem;
+}
+
+.button {
+    padding: 10px 60px;
+    background-color: #D90429;
+    color: #EDF2F4;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    width: 3000px;
+    margin: 10px;
+}
+
+.button:hover {
+    background-color: #EDF2F4;
+    color: #D90429;
+}
+
+.heroButtons {
+    margin-top: 50px;
+}
+
+.features section {
+    height: 85vh;
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
 }

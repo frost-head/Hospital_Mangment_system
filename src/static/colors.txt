@@ -1,0 +1,3 @@
+#2B2D42 - black
+#EDF2F4 - white
+#D90429 - red
