@@ -111,18 +111,19 @@ nav h1 {
 }
 
 .button {
-    padding: 10px 60px;
+    padding: 5px 30px;
     background-color: #D90429;
     color: #EDF2F4;
     border-radius: 50px;
     font-size: 1.5rem;
-    width: 3000px;
     margin: 10px;
+    text-align: center;
 }
 
 .button:hover {
     background-color: #EDF2F4;
     color: #D90429;
+    box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.25);
 }
 
 .heroButtons {
@@ -130,9 +131,31 @@ nav h1 {
 }
 
 .features section {
-    height: 85vh;
+    height: 500px;
+    width: 25vw;
     display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 50px;
+    box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.178);
+    border-radius: 25px;
+    margin: 50px 0px;
+    transition: 0.5s;
+    text-align: center;
+}
+
+.features section:hover {
+    box-shadow: 5px 5px 50px rgba(217, 4, 41, 0.3);
+}
+
+.features h3 {
+    text-align: center;
+}
+
+.features {
+    display: flex;
+    justify-content: space-between;
     align-content: center;
-    justify-content: flex-start;
     align-items: center;
+    flex-wrap: wrap;
 }
