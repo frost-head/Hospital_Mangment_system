@@ -7,20 +7,20 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     overflow-x: hidden;
 }
 
 h1 {
-    font-size: 4rem;
+    font-size: 3.6rem;
 }
 
 h2 {
-    font-size: 2.8rem;
+    font-size: 2.4rem;
 }
 
 h3 {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
 }
 
 a {
@@ -52,7 +52,7 @@ nav {
 }
 
 nav h1 {
-    font-size: 2.2rem;
+    font-size: 1.9rem;
 }
 
 .navlinks a {
@@ -91,7 +91,7 @@ nav h1 {
 }
 
 .heroText {
-    width: 50vw;
+    width: 55vw;
     height: 85vh;
     position: absolute;
     left: 0;
@@ -107,7 +107,7 @@ nav h1 {
 }
 
 .heroText p {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
 }
 
 .button {
@@ -115,7 +115,7 @@ nav h1 {
     background-color: #D90429;
     color: #EDF2F4;
     border-radius: 50px;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     width: 3000px;
     margin: 10px;
 }
