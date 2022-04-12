@@ -7,23 +7,24 @@
 {% endblock %}
 <!-- body -->
 {% block body %}
-<div class="forms">
-    <h2>
-        Login
-    </h2>
-    <hr>
-    <p>
-        Lables Followed by '*' are required to fill
-    </p>
-    <form method="post">
+<div class="centerDiv">
+    <div class="forms">
+        <h2>
+            Login
+        </h2>
+        <hr>
+        <p class="required">
+            Lables Followed by '*' are required to fill
+        </p>
+        <form method="post">
 
-        <label for="email">Email *</label>
-        <input type="email" name="email" required>
+            <label for="email">Email *</label>
+            <input type="email" name="email" required>
 
-        <label for="password">Password *</label>
-        <input type="password" name="password" required>
+            <label for="password">Password *</label>
+            <input type="password" name="password" required>
 
-        <input type="submit" value="Login">
-    </form>
-</div>
-{% endblock %}
+            <input type="submit" class="button" value="Login">
+        </form>
+    </div>
+</div>{% endblock %}
