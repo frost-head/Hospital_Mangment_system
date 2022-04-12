@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     overflow-x: hidden;
 }
 
@@ -16,11 +16,11 @@ h1 {
 }
 
 h2 {
-    font-size: 2.8rem;
+    font-size: 1.9rem;
 }
 
 h3 {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
 }
 
 a {
@@ -52,7 +52,7 @@ nav {
 }
 
 nav h1 {
-    font-size: 2.2rem;
+    font-size: 1.9rem;
 }
 
 .navlinks a {
@@ -107,7 +107,7 @@ nav h1 {
 }
 
 .heroText p {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
 }
 
 .button {
@@ -115,7 +115,7 @@ nav h1 {
     background-color: #D90429;
     color: #EDF2F4;
     border-radius: 50px;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     margin: 10px;
     text-align: center;
     border: 0px black;
@@ -187,11 +187,11 @@ form {
 }
 
 form label {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
 }
 
 form input {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     margin-bottom: 20px;
     padding-left: 5px;
 }
