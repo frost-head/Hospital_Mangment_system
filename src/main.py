@@ -199,11 +199,6 @@ def staffAddVitals():
         return redirect('/staffDashboard')
     return render_template('staffAddVitals.html')
 
-@app.route('/patient')
-def patient():
-    if 'user' in session:
-        return redirect("/patientDashboard")
-    return render_template("patient.html")
 
 @app.route('/appointment')
 def appointment():
