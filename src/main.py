@@ -205,4 +205,10 @@ def patient():
         return redirect("/patientDashboard")
     return render_template("patient.html")
 
+@app.route('/appointment')
+def appointment():
+    if "user" not in session:
+        return redirect("/patientLogin")
+    return render_template("appointment.html")
+
 app.run(debug=True, host='0.0.0.0')
