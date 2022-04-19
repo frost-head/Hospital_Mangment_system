@@ -4,7 +4,7 @@
             Title
         </h1>
     </a>
-    {% if 'user' in session %}
+    {% if navless == Flase %} {% if 'user' in session %}
     <div class="navlinks">
         <a href="/patientDashboard">Dashboard</a>
         <a href="/logout">Logout</a>
@@ -14,6 +14,6 @@
         <a href="/patientLogin">Login</a>
         <a href="/patientRegister">Register</a>
     </div>
-    {% endif %}
+    {% endif %} {% endif %}
 
 </nav>

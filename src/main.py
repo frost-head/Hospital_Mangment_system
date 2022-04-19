@@ -23,7 +23,7 @@ app.secret_key = os.urandom(24)
 
 @app.route('/')
 def home():
-    return render_template('Home.html')
+    return render_template('Home.html', navless=True)
 
 
 @app.route('/patientLogin', methods=['GET', 'POST'])
@@ -54,7 +54,7 @@ def patientlogin():
         else:
             flash('User not Found', 'danger')
 
-    return render_template('Login.html')
+    return render_template('Login.html', navless=True)
 
 
 @app.route('/patientRegister', methods=['GET', 'POST'])
@@ -92,7 +92,7 @@ def patientRegister():
             print(uid)
         return redirect('/')
 
-    return render_template('Register.html')
+    return render_template('Register.html', navless=True)
 
 
 @app.route('/logout')
@@ -131,7 +131,7 @@ def staffRegister():
             print(uid)
         return redirect('/')
 
-    return render_template('StaffRegister.html')
+    return render_template('StaffRegister.html', navless=True)
 
 @app.route('/staffLogin' ,methods=['GET', 'POST'])
 def stafflogin():
@@ -156,7 +156,7 @@ def stafflogin():
     else:
         flash('User not Found', 'danger')
 
-    return render_template('staffLogin.html')
+    return render_template('staffLogin.html', navless=True)
 
 @app.route('/logout')
 def stafflogout():
@@ -204,6 +204,8 @@ def staffAddVitals():
 def appointment():
     if "user" not in session:
         return redirect("/patientLogin")
-    return render_template("appointment.html")
+    staffData = fetchall(mysql, "select sid and name from staff")
+    appointmentData = fetchall(mysql, "select * from appointmetn")
+    return render_template("appointment.html", staffData=staffData, appointmentData = appointmentData)
 
 app.run(debug=True, host='0.0.0.0')
