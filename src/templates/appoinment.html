@@ -8,7 +8,7 @@
 <!-- body -->
 {% block body %}
 <div class="centerDiv">
-    <div class="forms" style="width: 100%;">
+    <div class="forms">
         <h2>
             Appointments
         </h2>
@@ -20,7 +20,18 @@
         <h3>
             Sorry {{appointmentData['name']}} is bussy for that time
         </h3>
-        <a href="/appointments" class="button">Look for diffrent time</a> {% else %} {% endif %}
+        <div class="centerDiv">
+            <a href="/appointments" class="button">Look for diffrent time</a>
+        </div>
+        {% else %}
+        <h3>
+            Appointmet avialable
+        </h3>
+
+        <p>
+            Want to book
+        </p>
+        <a href="/bookAppointment/{{bookData[0]}}/{{bookData[1]}}/{{bookData[2]}}" class="button">Confirm Book</a> {% endif %}
 
     </div>
 

@@ -3,6 +3,8 @@ from flask import Flask, redirect, render_template, request, flash, session, url
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import os
+
+from oauthlib import set_debug
 from database import *
 
 
@@ -213,13 +215,20 @@ def appointments():
     
     return render_template("appointments.html", staffData=staffData)
 
-@app.route('/appointment/<sid>/<date>/<time>')
+@app.route('/appointment/<sid>/<date>/<time>', methods=['GET','POST'])
 def appointment(sid,date, time):
-    # if "user" not in session:       
-    #     return redirect("/patientLogin")
+    if "user" not in session:       
+        return redirect("/patientLogin")
     appointmentData = fetchone(mysql, "select * from appointments where sid = {} and date_time = '{} {}'".format(sid, date, time))
-    print(appointmentData)
-    return render_template('appoinment.html', appointmentData = appointmentData)
+    bookData= [sid,date, time]
+    return render_template('appoinment.html', appointmentData = appointmentData,bookData=bookData)
+
+@app.route('/bookAppointment/<sid>/<date>/<time>')
+def bookAppointment(sid, date, time):
+    if "user" not in session:       
+        return redirect("/patientLogin")
+    insert(mysql, "insert into appointments(sid, pid, date_time) values({},{},'{} {}');".format(sid, session['user'], date, time))
+    return redirect("/patientDashboard")
 
 
 app.run(debug=True, host='0.0.0.0')
