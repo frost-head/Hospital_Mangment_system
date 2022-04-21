@@ -8,11 +8,15 @@
 <!-- body -->
 {% block body %}
 <div class="centerDiv">
-    <div class="content">
-        <h1>
+    <div class="forms" style="width: 100%;">
+        <h2>
             Appointments
-        </h1>
+        </h2>
         <hr>
-        <P></P>
+        <p class="required">
+
+        </p>
+        {% for data in appointmentData %} {{data}} {% endfor %}
     </div>
+
 </div>{% endblock %}

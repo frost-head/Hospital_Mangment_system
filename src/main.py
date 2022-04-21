@@ -1,3 +1,4 @@
+from crypt import methods
 import re
 from flask import Flask, redirect, render_template, request, flash, session, url_for
 from flask_mysqldb import MySQL
@@ -195,17 +196,31 @@ def staffAddVitals():
         spo2 = request.form['spo2']
         weight = request.form['weight']
         sid = session['user']
-        insert(mysql,"insert into vitals(pid, temp, pulse, blood_pressure, resp_rate, spo2, sid, weight) values({},{},{},{},{},{},{},{})".format(pid, temp, pulse, bp, rr, spo2, sid, weight))
+        insert(mysql,"insert into vitals(pid, temp, pulse,  blood_pressure, resp_rate, spo2, sid, weight) values({},{},{},{},{},{},{},{})".format(pid, temp, pulse, bp, rr, spo2, sid, weight))
         return redirect('/staffDashboard')
     return render_template('staffAddVitals.html')
 
 
-@app.route('/appointment')
-def appointment():
+@app.route('/appointments', methods=['GET','POST'])
+def appointments():
     if "user" not in session:
         return redirect("/patientLogin")
-    staffData = fetchall(mysql, "select sid and name from staff")
-    appointmentData = fetchall(mysql, "select * from appointmetn")
-    return render_template("appointment.html", staffData=staffData, appointmentData = appointmentData)
+
+    if request.method == 'POST':
+        
+        return redirect('/appointment/{}/{}'.format(request.form['sid'],request.form['date']))
+    staffData = fetchall(mysql, "select sid, name from staff where desg = 0")
+    print(staffData)
+    
+    return render_template("appointments.html", staffData=staffData)
+
+@app.route('/appointment/<sid>/<date>')
+def appointment(sid,date):
+    # if "user" not in session:       
+    #     return redirect("/patientLogin")
+    appointmentData = fetchall(mysql, "select * from appointments where sid = {} and date_time = '{}'".format(sid, date))
+    print(appointmentData)
+    return render_template('appoinment.html', appointmentData = appointmentData)
+
 
 app.run(debug=True, host='0.0.0.0')
