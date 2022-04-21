@@ -16,7 +16,12 @@
         <p class="required">
 
         </p>
-        {% for data in appointmentData %} {{data}} {% endfor %}
+        {% if appointmentData %}
+        <h3>
+            Sorry {{appointmentData['name']}} is bussy for that time
+        </h3>
+        <a href="/appointments" class="button">Look for diffrent time</a> {% else %} {% endif %}
+
     </div>
 
 </div>{% endblock %}

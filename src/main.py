@@ -1,5 +1,4 @@
-from crypt import methods
-import re
+
 from flask import Flask, redirect, render_template, request, flash, session, url_for
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
@@ -208,17 +207,17 @@ def appointments():
 
     if request.method == 'POST':
         
-        return redirect('/appointment/{}/{}'.format(request.form['sid'],request.form['date']))
+        return redirect('/appointment/{}/{}/{}'.format(request.form['sid'],request.form['date'], request.form['time']))
     staffData = fetchall(mysql, "select sid, name from staff where desg = 0")
     print(staffData)
     
     return render_template("appointments.html", staffData=staffData)
 
-@app.route('/appointment/<sid>/<date>')
-def appointment(sid,date):
+@app.route('/appointment/<sid>/<date>/<time>')
+def appointment(sid,date, time):
     # if "user" not in session:       
     #     return redirect("/patientLogin")
-    appointmentData = fetchall(mysql, "select * from appointments where sid = {} and date_time = '{}'".format(sid, date))
+    appointmentData = fetchone(mysql, "select * from appointments where sid = {} and date_time = '{} {}'".format(sid, date, time))
     print(appointmentData)
     return render_template('appoinment.html', appointmentData = appointmentData)
 
