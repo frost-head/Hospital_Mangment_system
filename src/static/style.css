@@ -248,3 +248,30 @@ form .button {
     width: 100%;
     margin-top: 50px;
 }
+
+.item {
+    height: 380px;
+    width: 18vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 20px;
+    box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.178);
+    border-radius: 15px;
+    margin: 30px 0px;
+    transition: 0.5s;
+    text-align: center;
+}
+
+.item p {
+    flex: 3;
+    font-size: 1rem;
+}
+
+.item h3 {
+    font-size: 1.1rem;
+}
+
+.item input {
+    flex: 1;
+}

@@ -235,8 +235,13 @@ def bookAppointment(sid, date, time):
 
 @app.route('/store')
 def store():
-    if "user" not in session:
-        return redirect("/patientLogin")
+    # if "user" not in session:
+    #     return redirect("/patientLogin")
+    
+    # for development purpose
+    session['user'] = 1
+
+    
     items = fetchall(mysql, "select * from store")
     print(items)
     cart = fetchall(mysql, "select * from cart where pid = {}".format(session['user']))

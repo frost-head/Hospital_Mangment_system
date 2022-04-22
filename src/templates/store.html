@@ -7,11 +7,10 @@
 {% endblock %}
 <!-- body -->
 {% block body %}
-<div class="forms">
-    <h2>
-        Hey, this is store
-    </h2>
-    <hr>
 
-</div>
-{% endblock %}
+<h2 style="margin-top:50px;">
+    Store
+</h2>
+<hr>
+<div class="features">{% for item in items %} {% include '/includes/storeItem.html' %} {% endfor %}
+    <div>{% endblock %}
