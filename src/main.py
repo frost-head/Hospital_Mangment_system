@@ -1,10 +1,8 @@
-
+from re import template
 from flask import Flask, redirect, render_template, request, flash, session, url_for
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import os
-
-from oauthlib import set_debug
 from database import *
 
 
@@ -21,42 +19,9 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = os.urandom(24)
 
 
-
-
 @app.route('/')
 def home():
     return render_template('Home.html', navless=True)
-
-
-@app.route('/patientLogin', methods=['GET', 'POST'])
-def patientlogin():
-    if 'user' in session:
-        flash('Already loged in', 'danger')
-        return redirect('/')
-
-    if request.method == 'POST':
-        email = request.form['email']
-        passcode = request.form['password']
-        data = fetchone(
-            mysql, "select pid, password from patient where email = '{}'".format(email))
-
-        if data:
-            password = data['password']
-            uid = data['pid']
-
-            if bcrypt.check_password_hash(password, passcode):
-                password = data['password']
-                uid = data['pid']
-
-                session['user'] = uid
-                flash('Successfully logged in', 'success')
-                return redirect('/')
-            else:
-                flash('Invalid Password', 'danger')
-        else:
-            flash('User not Found', 'danger')
-
-    return render_template('Login.html', navless=True)
 
 
 @app.route('/patientRegister', methods=['GET', 'POST'])
@@ -83,9 +48,10 @@ def patientRegister():
             address = request.form['address']
         else:
             address = 'N/A'
+        number = 0
 
-        insert(mysql, "insert into patient(name, email, password, blood_group, father_name,address, age) values('{}', '{}','{}','{}','{}','{}',{})".format(
-            name, email, pw_hash, bloodG, fatherN, address, age))
+        insert(mysql, "insert into patient(email, password, name, number, address, blood_group, father_name, age) values('{}', '{}','{}','{}','{}','{}','{}','{}')".format(
+            email, pw_hash, name, number,  address, bloodG, fatherN, age))
 
         uid = fetchone(
             mysql, "select pid from patient where email = '{}'".format(email))
@@ -94,18 +60,41 @@ def patientRegister():
             print(uid)
         return redirect('/')
 
-    return render_template('Register.html', navless=True)
+    return render_template('patientRegister.html', navless=True)
 
 
-@app.route('/logout')
-def logout():
+@app.route('/patientLogin', methods=['GET', 'POST'])
+def patientlogin():
     if 'user' in session:
-        session.pop('user')
-        return redirect('/')
-    return redirect('/patientLogin')
+        flash('Already loged in', 'danger')
+        return redirect('/patientDashboard')
+
+    if request.method == 'POST':
+        email = request.form['email']
+        passcode = request.form['password']
+        data = fetchone(
+            mysql, "select pid, password from patient where email = '{}'".format(email))
+
+        if data:
+            password = data['password']
+            uid = data['pid']
+
+            if bcrypt.check_password_hash(password, passcode):
+                password = data['password']
+                uid = data['pid']
+
+                session['user'] = uid
+                flash('Successfully logged in', 'success')
+                return redirect('/patientDashboard')
+            else:
+                flash('Invalid Password', 'danger')
+        else:
+            flash('User not Found', 'danger')
+
+    return render_template('Login.html', navless=True)
 
 
-@app.route('/staffRegister', methods=['GET','POST'])
+@app.route('/staffRegister', methods=['GET', 'POST'])
 def staffRegister():
     if request.method == 'POST':
         name = request.form['name']
@@ -124,7 +113,7 @@ def staffRegister():
             address = 'N/A'
 
         insert(mysql, "insert into staff(name, email, password, number, address, desg) values('{}', '{}','{}','{}','{}','{}')".format(
-            name, email, pw_hash,number, address, desg))
+            name, email, pw_hash, number, address, desg))
 
         uid = fetchone(
             mysql, "select sid from staff where email = '{}'".format(email))
@@ -135,7 +124,8 @@ def staffRegister():
 
     return render_template('StaffRegister.html', navless=True)
 
-@app.route('/staffLogin' ,methods=['GET', 'POST'])
+
+@app.route('/staffLogin', methods=['GET', 'POST'])
 def stafflogin():
     if 'user' in session:
         flash('Already loged in', 'danger')
@@ -160,29 +150,36 @@ def stafflogin():
 
     return render_template('staffLogin.html', navless=True)
 
+
 @app.route('/logout')
 def stafflogout():
     if 'user' in session:
         session.pop('user')
         return redirect('/')
     if 'user' not in session:
-        return redirect('/staffLogin')
+        return redirect('/')
+
 
 @app.route('/staffDashboard')
 def staffDashboard():
     if 'user' not in session:
         return redirect("/staffLogin")
-    data = fetchone(mysql, "select * from staff where sid = {}".format(session['user']))
+    data = fetchone(
+        mysql, "select * from staff where sid = {}".format(session['user']))
     return render_template('staffDashboard.html', data=data)
+
 
 @app.route('/patientDashboard')
 def patientDashboard():
     if 'user' not in session:
         return redirect("/patientLogin")
-    patientData = fetchone(mysql, "select * from patient where pid = {}".format(session['user']))
-    vitalsData = fetchall(mysql, "select * from vitals where pid = {}".format(session['user']))
+    patientData = fetchone(
+        mysql, "select * from patient where pid = {}".format(session['user']))
+    vitalsData = fetchall(
+        mysql, "select * from vitals where pid = {}".format(session['user']))
     print(vitalsData)
-    return render_template('patientDashboard.html',patientData=patientData, vitalsData=vitalsData)
+    return render_template('patientDashboard.html', patientData=patientData, vitalsData=vitalsData)
+
 
 @app.route('/staffAddVitals', methods=['GET', 'POST'])
 def staffAddVitals():
@@ -197,38 +194,54 @@ def staffAddVitals():
         spo2 = request.form['spo2']
         weight = request.form['weight']
         sid = session['user']
-        insert(mysql,"insert into vitals(pid, temp, pulse,  blood_pressure, resp_rate, spo2, sid, weight) values({},{},{},{},{},{},{},{})".format(pid, temp, pulse, bp, rr, spo2, sid, weight))
+        insert(mysql, "insert into vitals(pid, temp, pulse,  blood_pressure, resp_rate, spo2, sid, weight) values({},{},{},{},{},{},{},{})".format(
+            pid, temp, pulse, bp, rr, spo2, sid, weight))
         return redirect('/staffDashboard')
     return render_template('staffAddVitals.html')
 
 
-@app.route('/appointments', methods=['GET','POST'])
+@app.route('/appointments', methods=['GET', 'POST'])
 def appointments():
     if "user" not in session:
         return redirect("/patientLogin")
 
     if request.method == 'POST':
-        
-        return redirect('/appointment/{}/{}/{}'.format(request.form['sid'],request.form['date'], request.form['time']))
+
+        return redirect('/appointment/{}/{}/{}'.format(request.form['sid'], request.form['date'], request.form['time']))
     staffData = fetchall(mysql, "select sid, name from staff where desg = 0")
     print(staffData)
-    
+
     return render_template("appointments.html", staffData=staffData)
 
-@app.route('/appointment/<sid>/<date>/<time>', methods=['GET','POST'])
-def appointment(sid,date, time):
-    if "user" not in session:       
+
+@app.route('/appointment/<sid>/<date>/<time>', methods=['GET', 'POST'])
+def appointment(sid, date, time):
+    if "user" not in session:
         return redirect("/patientLogin")
-    appointmentData = fetchone(mysql, "select * from appointments where sid = {} and date_time = '{} {}'".format(sid, date, time))
-    bookData= [sid,date, time]
-    return render_template('appoinment.html', appointmentData = appointmentData,bookData=bookData)
+    appointmentData = fetchone(
+        mysql, "select * from appointments where sid = {} and date_time = '{} {}'".format(sid, date, time))
+    bookData = [sid, date, time]
+    return render_template('appoinment.html', appointmentData=appointmentData, bookData=bookData)
+
 
 @app.route('/bookAppointment/<sid>/<date>/<time>')
 def bookAppointment(sid, date, time):
-    if "user" not in session:       
+    if "user" not in session:
         return redirect("/patientLogin")
-    insert(mysql, "insert into appointments(sid, pid, date_time) values({},{},'{} {}');".format(sid, session['user'], date, time))
+    insert(mysql, "insert into appointments(sid, pid, date_time) values({},{},'{} {}');".format(
+        sid, session['user'], date, time))
     return redirect("/patientDashboard")
+
+
+@app.route('/store')
+def store():
+    if "user" not in session:
+        return redirect("/patientLogin")
+    items = fetchall(mysql, "select * from store")
+    print(items)
+    cart = fetchall(mysql, "select * from cart where pid = {}".format(session['user']))
+    
+    return render_template('store.html', items=items)
 
 
 app.run(debug=True, host='0.0.0.0')
