@@ -247,11 +247,11 @@ def store():
     cart = fetchall(
         mysql, "select * from cart where pid = {}".format(session['user']))
     print(cart)
-    item = request.form['item_id']
-    qty = request.form['qty']
-    if request.method == 'POST':
-        insert(mysql, "insert into patient(item_id, pid, qty) values('{}', '{}', '{}')".format(
-            item, session['user'], qty))
+    # item = request.form['item']
+    # qty = request.form['qty']
+    # if request.method == 'POST':
+    #     insert(mysql, "insert into patient(item_id, pid, qty) values('{}', '{}', '{}')".format(
+    #         item, session['user'], qty))
     return render_template('store.html', items=items)
 
 
