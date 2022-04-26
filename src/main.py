@@ -1,3 +1,4 @@
+# from crypt import methods
 from re import template
 from flask import Flask, redirect, render_template, request, flash, session, url_for
 from flask_mysqldb import MySQL
@@ -91,7 +92,7 @@ def patientlogin():
         else:
             flash('User not Found', 'danger')
 
-    return render_template('Login.html', navless=True)
+    return render_template('patientLogin.html', navless=True)
 
 
 @app.route('/staffRegister', methods=['GET', 'POST'])
@@ -233,19 +234,24 @@ def bookAppointment(sid, date, time):
     return redirect("/patientDashboard")
 
 
-@app.route('/store')
+@app.route('/store', methods=['GET', 'POST'])
 def store():
     # if "user" not in session:
     #     return redirect("/patientLogin")
-    
+
     # for development purpose
     session['user'] = 1
 
-    
     items = fetchall(mysql, "select * from store")
     print(items)
-    cart = fetchall(mysql, "select * from cart where pid = {}".format(session['user']))
-    
+    cart = fetchall(
+        mysql, "select * from cart where pid = {}".format(session['user']))
+    print(cart)
+    item = request.form['item_id']
+    qty = request.form['qty']
+    if request.method == 'POST':
+        insert(mysql, "insert into patient(item_id, pid, qty) values('{}', '{}', '{}')".format(
+            item, session['user'], qty))
     return render_template('store.html', items=items)
 
 
