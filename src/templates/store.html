@@ -13,4 +13,10 @@
 </h2>
 <hr>
 <div class="features">{% for item in items %} {% include '/includes/storeItem.html' %} {% endfor %}
-    <div>{% endblock %}
+    <div>
+
+        <div class="heroButtons">
+            <a class="button" href="/cart">Cart</a>
+        </div>
+
+        {% endblock %}

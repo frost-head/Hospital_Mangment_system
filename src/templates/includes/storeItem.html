@@ -1,4 +1,4 @@
-<div class="item">
+<div class="storeitem">
     <img src="/static/images/billing.png" style="margin-left: 50px;" width="68%" alt="">
     <h3>
         {{item['name']}}
@@ -7,8 +7,12 @@
         <p>
             Price - INR {{item['price']}}
         </p>
-        <input type="number" placeholder="qty">
+
     </div>
-    <a href="#" class="button">add to cart</a>
+    <form method="post">
+        <input type="number" name="qty" required>
+        <input type="number" name="item_id" style="display: none; " value="{{item['item_id']}}">
+        <input type="submit" value="add to cart">
+    </form>
 
 </div>

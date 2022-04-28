@@ -1,0 +1,17 @@
+<div class="cartitem">
+    <h3>
+        {{item['name']}}
+    </h3>
+    <p>
+        Price - INR {{item['price']}}
+    </p>
+    <form method="post">
+        <input type="number" name="qty" style="display: none;" value="{{item['qty']}}">
+        <input type="number" name="item_id" style="display: none;" value="{{items['item_id']}}">
+        
+        <div>
+            <a class="button" href="/delete">delete</a>
+        </div>
+    </form>
+
+</div>

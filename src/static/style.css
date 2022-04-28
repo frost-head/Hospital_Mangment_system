@@ -249,7 +249,7 @@ form .button {
     margin-top: 50px;
 }
 
-.item {
+.storeitem {
     height: 380px;
     width: 18vw;
     display: flex;
@@ -263,15 +263,43 @@ form .button {
     text-align: center;
 }
 
-.item p {
+.storeitem p {
     flex: 3;
     font-size: 1rem;
 }
 
-.item h3 {
+.storeitem h3 {
     font-size: 1.1rem;
 }
 
-.item input {
+.storeitem input {
+    flex: 1;
+}
+
+
+.cartitem {
+    height: 50px;
+    width: 1000vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 10px;
+    box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.178);
+    border-radius: 15px;
+    margin: 30px 0px;
+    transition: 0.5s;
+    text-align: center;
+}
+
+.cartitem p {
+    flex: 3;
+    font-size: 1rem;
+}
+
+.cartitem h3 {
+    font-size: 1.1rem;
+}
+
+.cartitem input {
     flex: 1;
 }

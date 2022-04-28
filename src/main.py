@@ -4,6 +4,8 @@ from flask import Flask, redirect, render_template, request, flash, session, url
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import os
+
+from sqlalchemy import delete
 from database import *
 
 
@@ -243,16 +245,53 @@ def store():
     session['user'] = 1
 
     items = fetchall(mysql, "select * from store")
-    print(items)
+    if request.method == 'POST':
+        qty = request.form['qty']
+        item_id = request.form['item_id']
+        return storeRedirect(item_id, qty)
+    return render_template('store.html', items=items)
+
+
+@app.route("/storeRedirect/<itemid>/qty")
+def storeRedirect(itemid, qty):
+    insert(mysql, "insert into cart(item_id, pid, qty) values({},{},{})".format(
+        itemid, session['user'], qty))
+    return redirect('/store')
+
+
+@app.route('/cart')
+def order():
+    # if "user" not in session:
+    #     return redirect("/patientLogin")
+
+    # for development purpose
+
+    session['user'] = 1
+
+    cart = fetchall(
+        mysql, "select * from cart where pid = {}".format(session['user']))
+    items = fetchall(mysql, "select * from store")
+
+    if request.method == 'POST':
+        qty = request.form['qty']
+        item_id = request.form['item_id']
+        return storeRedirect(item_id, qty)
+
+    return render_template('cart.html', items=items)
+
+
+@app.route('/delete')
+def delete():
+    # if "user" not in session:
+    #     return redirect("/patientLogin")
+
+    # for development purpose
+
+    session['user'] = 1
     cart = fetchall(
         mysql, "select * from cart where pid = {}".format(session['user']))
     print(cart)
-    # item = request.form['item']
-    # qty = request.form['qty']
-    # if request.method == 'POST':
-    #     insert(mysql, "insert into patient(item_id, pid, qty) values('{}', '{}', '{}')".format(
-    #         item, session['user'], qty))
-    return render_template('store.html', items=items)
+    return render_template('cart.html')
 
 
 app.run(debug=True, host='0.0.0.0')
