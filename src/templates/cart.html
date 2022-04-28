@@ -1,0 +1,20 @@
+<!-- head -->
+{% extends 'Base.html' %} {% block head %}
+<title>
+    Cart
+</title>
+
+{% endblock %}
+<!-- body -->
+{% block body %}
+
+<h2 style="margin-top:50px;">
+    Your Cart
+</h2>
+<hr>
+<div class="features">{% for item in items %} {% include '/includes/cartItem.html' %} {% endfor %}
+    
+</div>
+
+
+{% endblock %}
