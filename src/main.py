@@ -4,8 +4,6 @@ from flask import Flask, redirect, render_template, request, flash, session, url
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import os
-
-from sqlalchemy import delete
 from database import *
 
 
@@ -292,6 +290,10 @@ def delete():
         mysql, "select * from cart where pid = {}".format(session['user']))
     print(cart)
     return render_template('cart.html')
+
+@app.route("/payment")
+def payment():
+    return render_template('payment.html')
 
 
 app.run(debug=True, host='0.0.0.0')

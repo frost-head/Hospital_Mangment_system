@@ -7,16 +7,30 @@
 {% endblock %}
 <!-- body -->
 {% block body %}
-
-<h2 style="margin-top:50px;">
+<div class="store">
+<h2 style="margin-top:40px;">
     Store
 </h2>
-<hr>
-<div class="features">{% for item in items %} {% include '/includes/storeItem.html' %} {% endfor %}
-    <div>
 
-        <div class="heroButtons">
-            <a class="button" href="/cart">Cart</a>
-        </div>
+<div class="heroButtons">
+    <a class="button" href="/cart">Cart</a>
+</div>
+</div>
+<hr>
+
+<!-- search part-->
+<div class="search">
+    
+    <form method="post" class="box">
+        <input type="text" name="search" placeholder="search">
+        <input type="submit" class="" value="🔎" >
+    </form>
+</div>
+
+
+<div class="features">{% for item in items %} {% include '/includes/storeItem.html' %} {% endfor %}
+</div>
+
+       
 
         {% endblock %}
