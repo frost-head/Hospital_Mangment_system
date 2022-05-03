@@ -245,7 +245,6 @@ def store():
     items = fetchall(mysql, "select * from store")
     if request.method == 'POST' and 'qty' in request.form:
         qty = request.form['qty']
-        print(qty)
         item_id = request.form['item_id']
         old_qty = fetchone(
             mysql, "select * from cart where item_id = {} and pid = {}".format(item_id, session['user']))
@@ -257,12 +256,9 @@ def store():
                 qty, item_id, session['user']))
 
     if request.method == 'POST' and 'search' in request.form:
-        print('2')
         search_name = request.form['search']
-        print(search_name)
         items = fetchall(
             mysql, "select * from store where name like '%{}%'".format(search_name))
-        print(items)
 
     return render_template('store.html', items=items)
 
