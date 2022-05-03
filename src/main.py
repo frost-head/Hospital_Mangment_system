@@ -1,8 +1,4 @@
-# from crypt import methods
-# from crypt import methods
 from asyncio.windows_events import NULL
-from pickle import NONE
-from re import template
 from flask import Flask, redirect, render_template, request, flash, session, url_for
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
@@ -251,24 +247,23 @@ def store():
         item_id = request.form['item_id']
         old_qty = fetchone(
             mysql, "select * from cart where item_id = {} and pid = {}".format(item_id, session['user']))
-        print(old_qty)
-        if old_qty is None:            
+        if old_qty is None:
             return storeRedirect(item_id, qty)
         else:
-            qty =int(qty) + old_qty['qty']
-            update(mysql, 'update cart set qty = {} where item_id = {} and pid = {}'.format(
+            qty = int(qty) + old_qty['pqty']
+            update(mysql, 'update cart set pqty = {} where item_id = {} and pid = {}'.format(
                 qty, item_id, session['user']))
     return render_template('store.html', items=items)
 
 
 @app.route("/storeRedirect/<itemid>/qty")
 def storeRedirect(itemid, qty):
-    insert(mysql, "insert into cart(item_id, pid, qty) values({},{},{})".format(
+    insert(mysql, "insert into cart(item_id, pid, pqty) values({},{},{})".format(
         itemid, session['user'], qty))
     return redirect('/store')
 
 
-@app.route('/cart')
+@app.route('/cart', methods=['GET', 'POST'])
 def cart():
     # if "user" not in session:
     #     return redirect("/patientLogin")
@@ -277,35 +272,22 @@ def cart():
 
     session['user'] = 1
 
-    cart = fetchall(
-        mysql, "select * from cart where pid = {}".format(session['user']))
-    items = fetchall(mysql, "select * from store")
+    items = fetchall(
+        mysql, "select * from store inner join cart on store.item_id = cart.item_id where pid = {}".format(session['user']))
 
-    if request.method == 'POST':
-        qty = request.form['qty']
-        item_id = request.form['item_id']
-        return storeRedirect(item_id, qty)
-
-    return render_template('cart.html', cart=cart)
-
-
-@app.route('/delete', methods=['GET', 'POST'])
-def delete():
-    # if "user" not in session:
-    #     return redirect("/patientLogin")
-
-    # for development purpose
-
-    session['user'] = 1
-    cart = fetchall(
-        mysql, "select * from cart where pid = {}".format(session['user']))
-    print(cart)
+    amount = 0
+    count = 0
+    for item in items:
+        amount += (item['price'] * item['pqty'])
+        count += 1
+        
     if request.method == 'POST':
         item_id = request.form['item_id']
-        delete = delete(mysql, 'delete from cart where item_id = {} and pid = {}'.format(
+        delete_item = delete(mysql, 'delete from cart where item_id = {} and pid = {}'.format(
             item_id, session['user']))
-        return cart()
-    return render_template('cart.html')
+        return redirect(url_for('cart'))
+
+    return render_template('cart.html', items=items, amount=amount, count=count)
 
 
 @app.route("/payment")
