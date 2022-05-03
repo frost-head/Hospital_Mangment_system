@@ -324,9 +324,9 @@ form .button {
 
 .cart-total{
 	flex: 0.25;
-	margin-left: 20px;
+	
 	padding: 20px;
-	height: 240px;
+	height:  fit-content;
 	border: 1px solid silver;
 	border-radius: 5px;
 }
