@@ -12,25 +12,40 @@
     Your Cart
 </h2>
 <hr>
-<div class="features">{% for item in items %} {% include '/includes/cartItem.html' %} {% endfor %}
-    
-</div>
+<div class="">
+   
+   <div>
+    {% for item in items %} {% include '/includes/cartItem.html' %} {% endfor %}
+   </div> 
+   <div class="cart-total">
 
+        <p>
 
-<div class="cart-total">
-   <p>
-        <span>Total Price</span>
-        <span>INR 450</span>
-    </p>
-    <p>
-        <span>Number of Items</span>
-        <span>2</span>
-    </p>
-    <p>
-        <span>You Save</span>
-        <span>INR 100</span>
-    </p>
-    <a href="/payment">Proceed to Checkout</a>
+            <span>Total Price</span>
+
+            <span>₹ 3,000</span>
+
+        </p>
+
+        <p>
+
+            <span>Number of Items</span>
+
+            <span>2</span>
+
+        </p>
+
+        <p>
+
+            <span>You Save</span>
+
+            <span>₹ 1,000</span>
+
+        </p>
+
+        <a href="#">Proceed to Checkout</a>
+
+    </div>
 </div>
 
 {% endblock %}
