@@ -1,17 +1,60 @@
-<div class="cartitem">
-    <h3>
-        {{cart['name']}}
-    </h3>
-    <p>
-        Price - INR {{cart['price']}}
-    </p>
-    <form method="post">
-        <input type="number" name="qty" style="display: none;" value="{{item['qty']}}">
-        <input type="number" name="item_id" style="display: none;" value="{{items['item_id']}}">
-        
-        <div>
-            <a class="button" href="/delete">delete</a>
-        </div>
-    </form>
+<div class="container">
 
-</div>
+	<div class="cart">
+
+		<div class="products">
+
+			<div class="product">
+
+				<img src="">
+
+				<div class="product-info">
+
+					<h3 class="product-name">MED</h3>
+
+					<h4 class="product-price">₹ 100</h4>
+
+					<h4 class="product-offer">50%</h4>
+
+					<p class="product-quantity">Qnt: <input value="1" name="">
+
+					<p class="product-remove">
+
+						<i class="fa fa-trash" aria-hidden="true"></i>
+
+						<span class="remove">Remove</span>
+
+					</p>
+
+				</div>
+
+			</div>
+
+			<div class="product">
+
+				<img src="">
+
+				<div class="product-info">
+
+					<h3 class="product-name">MED</h3>
+
+					<h4 class="product-price">₹ 200</h4>
+
+					<h4 class="product-offer">40%</h4>
+
+					<p class="product-quantity">Qnt: <input value="1" name="">
+
+					<p class="product-remove">
+
+						<i class="fa fa-trash" aria-hidden="true"></i>
+
+						<span class="remove">Remove</span>
+
+					</p>
+
+				</div>
+
+			</div>
+
+		</div>
+        </div>
