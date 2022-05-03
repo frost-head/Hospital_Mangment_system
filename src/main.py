@@ -1,8 +1,9 @@
-from asyncio.windows_events import NULL
 from flask import Flask, redirect, render_template, request, flash, session, url_for
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import os
+
+from sqlalchemy import null
 from database import *
 
 
@@ -242,8 +243,9 @@ def store():
     session['user'] = 1
 
     items = fetchall(mysql, "select * from store")
-    if request.method == 'POST':
+    if request.method == 'POST' and 'qty' in request.form:
         qty = request.form['qty']
+        print(qty)
         item_id = request.form['item_id']
         old_qty = fetchone(
             mysql, "select * from cart where item_id = {} and pid = {}".format(item_id, session['user']))
@@ -253,6 +255,15 @@ def store():
             qty = int(qty) + old_qty['pqty']
             update(mysql, 'update cart set pqty = {} where item_id = {} and pid = {}'.format(
                 qty, item_id, session['user']))
+
+    if request.method == 'POST' and 'search' in request.form:
+        print('2')
+        search_name = request.form['search']
+        print(search_name)
+        items = fetchall(
+            mysql, "select * from store where name like '%{}%'".format(search_name))
+        print(items)
+
     return render_template('store.html', items=items)
 
 
@@ -280,7 +291,7 @@ def cart():
     for item in items:
         amount += (item['price'] * item['pqty'])
         count += 1
-        
+
     if request.method == 'POST':
         item_id = request.form['item_id']
         delete_item = delete(mysql, 'delete from cart where item_id = {} and pid = {}'.format(
