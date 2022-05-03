@@ -28,7 +28,7 @@ CREATE TABLE `appointments` (
   `sid` int DEFAULT NULL,
   `date_time` datetime DEFAULT NULL,
   PRIMARY KEY (`app_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +37,7 @@ CREATE TABLE `appointments` (
 
 LOCK TABLES `appointments` WRITE;
 /*!40000 ALTER TABLE `appointments` DISABLE KEYS */;
+INSERT INTO `appointments` VALUES (1,2,1,'2022-04-30 12:00:00');
 /*!40000 ALTER TABLE `appointments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -48,10 +49,9 @@ DROP TABLE IF EXISTS `cart`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cart` (
-  `item_id` int NOT NULL,
+  `item_id` int DEFAULT NULL,
   `pid` int DEFAULT NULL,
-  `qty` int DEFAULT NULL,
-  PRIMARY KEY (`item_id`)
+  `pqty` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -82,7 +82,7 @@ CREATE TABLE `patient` (
   `blood_group` varchar(255) DEFAULT NULL,
   `father_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +91,7 @@ CREATE TABLE `patient` (
 
 LOCK TABLES `patient` WRITE;
 /*!40000 ALTER TABLE `patient` DISABLE KEYS */;
-INSERT INTO `patient` VALUES (1,'devbh789@gmail.com','$2b$12$7NuqMKh1PSLk/iNA1VH1.uQwxVdeqtS7PykMwm2lNlHHjuYVC8cki','Dev',0,'adads',19,'O+','dsadasd');
+INSERT INTO `patient` VALUES (1,'harshverma4466@gmail.com','$2b$12$7NuqMKh1PSLk/iNA1VH1.uQwxVdeqtS7PykMwm2lNlHHjuYVC8cki','Harsh Verma',8791129255,'Govindpuram, Ghaziabad, UP, India',18,'A+','Sarvesh Kumar'),(2,'devbh789@gmail.com','$2b$12$7ugye6KwK.dcCHwM.aVqueoimwoYfP/0DIAfSvUg.aZ6Yw.TDgTT.','Dev Bhandari',9871767420,'Rohini, Delhi, India',19,'O+','Narender Singh');
 /*!40000 ALTER TABLE `patient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -111,7 +111,7 @@ CREATE TABLE `staff` (
   `address` varchar(255) DEFAULT NULL,
   `number` bigint DEFAULT NULL,
   PRIMARY KEY (`sid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,6 +120,7 @@ CREATE TABLE `staff` (
 
 LOCK TABLES `staff` WRITE;
 /*!40000 ALTER TABLE `staff` DISABLE KEYS */;
+INSERT INTO `staff` VALUES (1,'devbh789@gmail.com','$2b$12$LEl8qgXzg/0cfqESkG213uY656xr89Cu4qRf3XLr9xAfkDAjn1oa2','Dev_Staff','Doctor','Rohini, Delhi, India',9871767420);
 /*!40000 ALTER TABLE `staff` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,4 +189,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-22 11:22:08
+-- Dump completed on 2022-05-03 16:53:19

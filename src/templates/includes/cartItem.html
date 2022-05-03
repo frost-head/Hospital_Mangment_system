@@ -10,51 +10,31 @@
 
 				<div class="product-info">
 
-					<h3 class="product-name">MED</h3>
+					<h3 class="product-name">{{item['name']}}</h3>
 
-					<h4 class="product-price">₹ 100</h4>
+					<h4 class="product-price">₹ {{item['price']}}</h4>
 
-					
 
-					<p class="product-quantity">Qnt: <input value="1" name="">
 
-					<p class="product-remove">
+					<p class="product-quantity">
+						Qnt: {{item['pqty']}} 
+					</p>
+					<!-- <p class="product-remove" >
 
 						<i class="fa fa-trash" aria-hidden="true"></i>
 
-						<span class="remove">Remove</span>
+						<span class="remove" >Remove</span>
 
-					</p>
-
-				</div>
-
-			</div>
-
-			<div class="product">
-
-				<img src="">
-
-				<div class="product-info">
-
-					<h3 class="product-name">MED</h3>
-
-					<h4 class="product-price">₹ 200</h4>
-
-				
-
-					<p class="product-quantity">Qnt: <input value="1" name="">
-
-					<p class="product-remove">
-
-						<i class="fa fa-trash" aria-hidden="true"></i>
-
-						<span class="remove">Remove</span>
-
-					</p>
-
+					</p> -->
+					<form method="post">
+						<input type="number" name="item_id" style="display: none;" value="{{item['item_id']}}">
+						<input type="submit" class="button" value="remove">
+					</form>
 				</div>
 
 			</div>
 
 		</div>
-        </div>
+
+	</div>
+</div>
