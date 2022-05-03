@@ -1,4 +1,7 @@
 # from crypt import methods
+# from crypt import methods
+from asyncio.windows_events import NULL
+from pickle import NONE
 from re import template
 from flask import Flask, redirect, render_template, request, flash, session, url_for
 from flask_mysqldb import MySQL
@@ -246,7 +249,15 @@ def store():
     if request.method == 'POST':
         qty = request.form['qty']
         item_id = request.form['item_id']
-        return storeRedirect(item_id, qty)
+        old_qty = fetchone(
+            mysql, "select * from cart where item_id = {} and pid = {}".format(item_id, session['user']))
+        print(old_qty)
+        if old_qty is None:            
+            return storeRedirect(item_id, qty)
+        else:
+            qty =int(qty) + old_qty['qty']
+            update(mysql, 'update cart set qty = {} where item_id = {} and pid = {}'.format(
+                qty, item_id, session['user']))
     return render_template('store.html', items=items)
 
 
@@ -258,7 +269,7 @@ def storeRedirect(itemid, qty):
 
 
 @app.route('/cart')
-def order():
+def cart():
     # if "user" not in session:
     #     return redirect("/patientLogin")
 
@@ -275,10 +286,10 @@ def order():
         item_id = request.form['item_id']
         return storeRedirect(item_id, qty)
 
-    return render_template('cart.html', items=items)
+    return render_template('cart.html', cart=cart)
 
 
-@app.route('/delete')
+@app.route('/delete', methods=['GET', 'POST'])
 def delete():
     # if "user" not in session:
     #     return redirect("/patientLogin")
@@ -289,7 +300,13 @@ def delete():
     cart = fetchall(
         mysql, "select * from cart where pid = {}".format(session['user']))
     print(cart)
+    if request.method == 'POST':
+        item_id = request.form['item_id']
+        delete = delete(mysql, 'delete from cart where item_id = {} and pid = {}'.format(
+            item_id, session['user']))
+        return cart()
     return render_template('cart.html')
+
 
 @app.route("/payment")
 def payment():
