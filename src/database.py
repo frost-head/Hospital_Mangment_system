@@ -21,3 +21,17 @@ def insert(mysql, querry):
     mysql.connection.commit()
     cur.close()
     return
+
+def delete(mysql, querry):
+    cur = mysql.connection.cursor()
+    cur.execute("{}".format(querry))
+    mysql.connection.commit()
+    cur.close()
+    return
+
+def update(mysql, querry):
+    cur = mysql.connection.cursor()
+    cur.execute("{}".format(querry))
+    mysql.connection.commit()
+    cur.close()
+    return
