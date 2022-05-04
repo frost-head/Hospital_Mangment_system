@@ -61,6 +61,7 @@ CREATE TABLE `cart` (
 
 LOCK TABLES `cart` WRITE;
 /*!40000 ALTER TABLE `cart` DISABLE KEYS */;
+INSERT INTO `cart` VALUES (1,1,10),(2,1,6),(3,1,1);
 /*!40000 ALTER TABLE `cart` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -136,8 +137,9 @@ CREATE TABLE `store` (
   `name` varchar(255) DEFAULT NULL,
   `qty` bigint DEFAULT NULL,
   `price` int DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -146,7 +148,7 @@ CREATE TABLE `store` (
 
 LOCK TABLES `store` WRITE;
 /*!40000 ALTER TABLE `store` DISABLE KEYS */;
-INSERT INTO `store` VALUES (1,'Ecosprin 75mg',10000,4),(2,'Shelcal 500mg',5696,98);
+INSERT INTO `store` VALUES (1,'Ecosprin 75mg',10000,4,'ecosprin-75mg.png'),(2,'Shelcal 500mg',5696,98,'shelcal-500mg.png'),(3,'Savlon Antiseptic Disinfectant Liquid 1000 Ml',4300,267,'savlon-antiseptic-disinfectant-liquid-1000-ml.png'),(4,'Dolo 650mg Strip Of 15 Tablets',3240,25,'dolo-650mg-strip-of-15-tablets.png'),(5,'Alex P Syrup 60ml',3240,25,'alex-p-syru-60-ml.png'),(6,'CEFREDROX 100 DT Tablet 10\'s',3240,25,'cefredrox-100-dt-tablet-10.png');
 /*!40000 ALTER TABLE `store` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -189,4 +191,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-03 16:53:19
+-- Dump completed on 2022-05-04  3:11:36
