@@ -27,6 +27,11 @@ def home():
 
 @app.route('/patientRegister', methods=['GET', 'POST'])
 def patientRegister():
+
+    if 'user' in session:
+        flash('Already loged in', 'danger')
+        return redirect('/patientDashboard')
+
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
@@ -97,6 +102,11 @@ def patientlogin():
 
 @app.route('/staffRegister', methods=['GET', 'POST'])
 def staffRegister():
+
+    if 'staff' in session:
+        flash('Already loged in', 'danger')
+        return redirect('/staffDashboard')
+
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
@@ -119,7 +129,7 @@ def staffRegister():
         uid = fetchone(
             mysql, "select sid from staff where email = '{}'".format(email))
         if uid:
-            session['user'] = uid['sid']
+            session['staff'] = uid['sid']
             print(uid)
         return redirect('/')
 
@@ -128,7 +138,7 @@ def staffRegister():
 
 @app.route('/staffLogin', methods=['GET', 'POST'])
 def stafflogin():
-    if 'user' in session:
+    if 'staff' in session:
         flash('Already loged in', 'danger')
         return redirect('/staffDashboard')
 
@@ -141,7 +151,7 @@ def stafflogin():
         if data:
             password = data['password']
             uid = data['sid']
-            session['user'] = uid
+            session['staff'] = uid
             flash('Successfully logged in', 'success')
             return redirect('/staffDashboard')
         else:
@@ -153,20 +163,29 @@ def stafflogin():
 
 
 @app.route('/logout')
-def stafflogout():
-    if 'user' in session:
-        session.pop('user')
-        return redirect('/')
-    if 'user' not in session:
-        return redirect('/')
+def logout():
 
+    if('user' in session.keys()):
+        if 'user' in session:
+            session.pop('user')
+            return redirect('/')
+        if 'user' not in session:
+            return redirect('/')
+
+    if('staff' in session.keys()):
+        if 'staff' in session:
+            session.pop('staff')
+            return redirect('/')
+        if 'staff' not in session:
+            return redirect('/')
+    
 
 @app.route('/staffDashboard')
 def staffDashboard():
-    if 'user' not in session:
+    if 'staff' not in session:
         return redirect("/staffLogin")
     data = fetchone(
-        mysql, "select * from staff where sid = {}".format(session['user']))
+        mysql, "select * from staff where sid = {}".format(session['staff']))
     return render_template('staffDashboard.html', data=data)
 
 
@@ -184,7 +203,7 @@ def patientDashboard():
 
 @app.route('/staffAddVitals', methods=['GET', 'POST'])
 def staffAddVitals():
-    if 'user' not in session:
+    if 'staff' not in session:
         return redirect('/staffLogin')
     if request.method == 'POST':
         pid = request.form['pid']
