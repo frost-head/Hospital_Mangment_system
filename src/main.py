@@ -30,6 +30,7 @@ def patientRegister():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
+        number = request.form['number']
         age = request.form['age']
         mailtest = fetchone(
             mysql, "select pid from patient where email = '{}'".format(email))
@@ -49,7 +50,6 @@ def patientRegister():
             address = request.form['address']
         else:
             address = 'N/A'
-        number = 0
 
         insert(mysql, "insert into patient(email, password, name, number, address, blood_group, father_name, age) values('{}', '{}','{}','{}','{}','{}','{}','{}')".format(
             email, pw_hash, name, number,  address, bloodG, fatherN, age))
@@ -236,11 +236,8 @@ def bookAppointment(sid, date, time):
 
 @app.route('/store', methods=['GET', 'POST'])
 def store():
-    # if "user" not in session:
-    #     return redirect("/patientLogin")
-
-    # for development purpose
-    session['user'] = 1
+    if "user" not in session:
+        return redirect("/patientLogin")
 
     items = fetchall(mysql, "select * from store")
     if request.method == 'POST' and 'qty' in request.form:
@@ -272,12 +269,8 @@ def storeRedirect(itemid, qty):
 
 @app.route('/cart', methods=['GET', 'POST'])
 def cart():
-    # if "user" not in session:
-    #     return redirect("/patientLogin")
-
-    # for development purpose
-
-    session['user'] = 1
+    if "user" not in session:
+        return redirect("/patientLogin")
 
     items = fetchall(
         mysql, "select * from store inner join cart on store.item_id = cart.item_id where pid = {}".format(session['user']))
