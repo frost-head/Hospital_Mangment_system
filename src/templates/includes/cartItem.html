@@ -19,16 +19,14 @@
 					<p class="product-quantity">
 						Qnt: {{item['pqty']}} 
 					</p>
-					<!-- <p class="product-remove" >
-
-						<i class="fa fa-trash" aria-hidden="true"></i>
-
-						<span class="remove" >Remove</span>
-
-					</p> -->
 					<form method="post">
 						<input type="number" name="item_id" style="display: none;" value="{{item['item_id']}}">
-						<input type="submit" class="button" value="remove">
+						<input type="submit" value="Remove" class="product-remove" >
+
+							<i class="fa fa-trash" aria-hidden="true"></i>
+	
+					</input>
+						
 					</form>
 				</div>
 
