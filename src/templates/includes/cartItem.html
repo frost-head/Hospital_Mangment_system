@@ -1,38 +1,37 @@
 <div class="container">
 
-	<div class="cart">
+    <div class="cart">
 
-		<div class="products">
+        <div class="products">
 
-			<div class="product">
+            <div class="product">
 
-				<img src="/static/images/store/{{item['image']}}">
+                <img src="/static/images/store/{{item['image']}}">
 
-				<div class="product-info">
+                <div class="product-info">
 
-					<h3 class="product-name">{{item['name']}}</h3>
+                    <h3 class="product-name">{{item['name']}}</h3>
 
-					<h4 class="product-price">₹ {{item['price']}}</h4>
+                    <h4 class="product-price">₹ {{item['price']}}</h4>
 
 
 
-					<p class="product-quantity">
-						Qnt: {{item['pqty']}} 
-					</p>
-					<form method="post">
-						<input type="number" name="item_id" style="display: none;" value="{{item['item_id']}}">
-						<input type="submit" value="Remove" class="product-remove" >
+                    <p class="product-quantity">
+                        Qnt: {{item['pqty']}}
+                    </p>
+                    <form method="post">
+                        <input type="number" name="item_id" style="display: none;" value="{{item['item_id']}}">
+                        <input type="submit" value="Remove" class="product-remove">
 
-							<i class="fa fa-trash" aria-hidden="true"></i>
-	
-					</input>
-						
-					</form>
-				</div>
 
-			</div>
+                        </input>
 
-		</div>
+                    </form>
+                </div>
 
-	</div>
+            </div>
+
+        </div>
+
+    </div>
 </div>

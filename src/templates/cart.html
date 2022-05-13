@@ -9,36 +9,36 @@
 {% block body %}
 
 <h2 style="margin-top:50px;">
-    Your Cart
+    Cart
 </h2>
 <hr>
-<div class="">
+<div class="cart">
 
     <div>
-     {% for item in items %} {% include '/includes/cartItem.html' %} {% endfor %}
-    </div> 
-    <div class="cart-total">
- 
-         <p>
- 
-             <span>Total Price</span>
- 
-             <span>₹ {{amount}}</span>
- 
-         </p>
- 
-         <p>
- 
-             <span>Number of Items</span>
- 
-             <span>{{count}}</span>
- 
-         </p>
- 
-        
- 
-         <a href="#">Proceed to Checkout</a>
+        {% for item in items %} {% include '/includes/cartItem.html' %} {% endfor %}
     </div>
- </div>
+    <div class="cart-total">
+
+        <p>
+
+            <span>Total Price</span>
+
+            <span>₹ {{amount}}</span>
+
+        </p>
+
+        <p>
+
+            <span>Number of Items</span>
+
+            <span>{{count}}</span>
+
+        </p>
+
+
+
+        <a href="#">Proceed to Checkout</a>
+    </div>
+</div>
 
 {% endblock %}

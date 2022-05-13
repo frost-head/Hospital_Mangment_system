@@ -397,6 +397,13 @@ form .button {
     height: fit-content;
 }
 
+.cart {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
 .cartitem {
     height: 50px;
     width: 1000vw;
@@ -425,11 +432,12 @@ form .button {
 }
 
 .cart-total {
-    flex: 0.25;
-    padding: 20px;
+    margin-top: 10px;
+    padding: 30px;
     height: fit-content;
     border: 1px solid silver;
-    border-radius: 5px;
+    border-radius: 10px;
+    width: 20vw;
 }
 
 .cart-total p {
@@ -445,13 +453,15 @@ form .button {
     height: 40px;
     line-height: 40px;
     background-color: #D90429dc;
-    ;
+    border-radius: 10px;
     color: white;
     text-decoration: none;
+    box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.178);
 }
 
 .cart-total a:hover {
-    background-color: cornflowerblue;
+    background-color: white;
+    color: #d90427dc;
 }
 
 
@@ -646,45 +656,30 @@ header span {
 }
 
 .container {
-    max-width: 1200px;
+    width: 100%;
     margin: 0;
     box-sizing: border-box;
 }
 
-.cart {
-    display: flex;
-}
-
-.products {
-    flex: 100;
-}
-
 .product {
     display: flex;
-    width: 100%;
+    width: 55vw;
     height: 200px;
     overflow: hidden;
-    border: 1px solid silver;
-    margin-bottom: 20px;
+    margin: 10px 0px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.2);
 }
 
-.product:hover {
-    border: none;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    transform: scale(1.01);
-}
-
-.product>img {
-    width: 300px;
+.product img {
     height: 200px;
-    object-fit: cover;
-}
-
-.product>img:hover {
-    transform: scale(1.04);
+    padding: 10px;
+    object-fit: contain;
+    flex: 0.75;
 }
 
 .product-info {
+    flex: 1;
     padding: 20px;
     width: 100%;
     position: relative;
@@ -701,17 +696,17 @@ header span {
     bottom: 20px;
     right: 20px;
     padding: 10px 25px;
-    background-color: green;
+    background-color: #D90429dc;
     color: white;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.2);
 }
 
 .product-remove:hover {
     background-color: white;
-    color: green;
-    font-weight: 600;
-    border: 1px solid green;
+    color: #d90427dc;
 }
 
 .product-quantity>input {
