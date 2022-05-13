@@ -1,18 +1,82 @@
-<div class="storeitem">
-    <img src="/static/images/store/{{item['image']}}" style="margin-left: 50px;" width="68%" alt="">
-    <h3>
+<div class="storeitem" id="{{item['item_id']}}">
+    <img id="img_{{item['item_id']}}" src="/static/images/store/{{item['image']}}" style="margin-left: 50px;" width="68%" alt="">
+    <h2 id="name_{{item['item_id']}}">
         {{item['name']}}
-    </h3>
-    <div>
-        <p>
-            Price - INR {{item['price']}}
-        </p>
+    </h2>
+    <div class="itemDetails" id="id_{{item['item_id']}}">
+        <div class="item">
+            <img id="img_{{item['item_id']}}" src="/static/images/store/{{item['image']}}">
 
+            <div class="details">
+                <div class="closeFlex">
+                    <div>
+                        <h2 id="name_{{item['item_id']}}">
+                            {{item['name']}}
+                        </h2>
+                        <p>
+                            ₹ {{item['price']}}
+                        </p>
+                        <form method="post">
+
+
+                            <input type="number" class="qty_details" placeholder="Qty" name="qty" required>
+
+
+
+                            <input type="number" name="item_id" style="display: none; " value="{{item['item_id']}}">
+                            <input type="submit" class="button" value="Add to cart">
+                        </form>
+                    </div>
+                    <h3 class="close" id="close_{{item['item_id']}}">
+                        X
+                    </h3>
+                </div>
+                <h3>
+                    Drug details
+                </h3>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta, nulla magnam. Fugit voluptatum aut, a accusamus necessitatibus ab repudiandae, incidunt tenetur maxime esse cupiditate cum neque ut id praesentium minima!
+                </p>
+            </div>
+        </div>
     </div>
     <form method="post">
-        <input type="number" name="qty" placeholder="Quantity"  required>
+
+        <div class="priceQty">
+            <input type="number" class="qty" placeholder="Qty" name="qty" required>
+
+            <p>
+                ₹ {{item['price']}}
+            </p>
+
+        </div>
+
         <input type="number" name="item_id" style="display: none; " value="{{item['item_id']}}">
-        <input type="submit" value="add to cart">
+        <input type="submit" class="button" value="Add to cart">
     </form>
+
+    <script>
+        function addRemove(id) {
+            let item = document.getElementById(id)
+            let itemDetails = document.getElementById("id_" + id)
+
+            let close = document.getElementById("close_" + id)
+            item.addEventListener("click", () => {
+                itemDetails.style = "display:block;"
+
+            })
+            close.addEventListener(
+                'mouseover',
+                () => {
+                    itemDetails.style = "display:none;"
+
+                }
+            )
+
+
+        }
+
+        addRemove("{{item['item_id']}}")
+    </script>
 
 </div>
