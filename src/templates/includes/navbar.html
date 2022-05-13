@@ -1,28 +1,19 @@
 <nav>
     <a href="/">
-        
-        <header class="header">
+        <div class="logo">
             <h2>CU <span>HealthCare</span> </h2>
-        </header>
-        <br>
+        </div>
+
     </a>
-    <div class="navlinks">
-        <a href="/AboutUs">About Us</a>
-        <a href="/Specialists">Specialists</a>
-        <a href="/patientDashboard">Dashboard</a>
-        <a href="/login">Login</a>
-       
-    </div>
     {% if navless == Flase %} {% if 'user' in session %}
     <div class="navlinks">
         <a href="/patientDashboard">Dashboard</a>
         <a href="/logout">Logout</a>
-    </div>
-    {% else %}
+    </div>{% endif %} {% else %}
     <div class="navlinks">
         <a href="/patientLogin">Login</a>
         <a href="/patientRegister">Register</a>
     </div>
-    {% endif %} {% endif %}
+    {% endif %}
 
 </nav>

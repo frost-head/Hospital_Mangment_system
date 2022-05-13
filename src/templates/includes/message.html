@@ -1,0 +1,17 @@
+<div class="message message-{{categories}}" id="message">
+    {{message}}
+    <button class="message-{{categories}}" onclick="remove()">
+        X
+    </button>
+</div>
+<script>
+    function remove() {
+        let obj = document.getElementById("message")
+        obj.style = "display:none;"
+    }
+    setTimeout(() => {
+        let obj = document.getElementById("message")
+        obj.style = "display:none;"
+
+    }, 2500); //delay is in milliseconds
+</script>

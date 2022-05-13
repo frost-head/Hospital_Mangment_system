@@ -9,8 +9,11 @@
 {% block body %}
 <div class="centerDiv">
     <div class="forms">
-        <h2>
-            Welcome to CU HealthCare
+        <h2 style="display: flex; flex-direction:row;">
+
+            <div class="logo">
+                <h2>Welcome to CU <span>HealthCare</span> </h2>
+            </div>
         </h2>
         <hr>
         <p class="required">
@@ -24,9 +27,10 @@
             <input type="password" name="password" required>
 
             <input type="submit" class="button" value="Login">
-            <div class="row"><p>Don't have an account? </p>
+            <div class="row">
+                <p>Don't have an account? </p>
                 <a href="/patientRegister">Register</a></div>
-            
+
         </form>
-        </div>
+    </div>
 </div>{% endblock %}

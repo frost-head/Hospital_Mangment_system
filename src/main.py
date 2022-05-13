@@ -2,8 +2,6 @@ from flask import Flask, redirect, render_template, request, flash, session, url
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import os
-
-from sqlalchemy import null
 from database import *
 
 
@@ -29,7 +27,7 @@ def home():
 def patientRegister():
 
     if 'user' in session:
-        flash('Already loged in', 'danger')
+        flash('Already loged in', 'bad')
         return redirect('/patientDashboard')
 
     if request.method == 'POST':
@@ -40,7 +38,8 @@ def patientRegister():
         mailtest = fetchone(
             mysql, "select pid from patient where email = '{}'".format(email))
         if mailtest:
-            return "Email already registrer"
+            flash("Email already registered", 'bad')
+
         password = request.form['password']
         pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
         if request.form['bloodG']:
@@ -63,8 +62,8 @@ def patientRegister():
             mysql, "select pid from patient where email = '{}'".format(email))
         if uid:
             session['user'] = uid['pid']
-            print(uid)
-        return redirect('/')
+            flash("Successfully created an account", 'good')
+        return redirect('/patientDashboard')
 
     return render_template('patientRegister.html', navless=True)
 
@@ -72,7 +71,7 @@ def patientRegister():
 @app.route('/patientLogin', methods=['GET', 'POST'])
 def patientlogin():
     if 'user' in session:
-        flash('Already loged in', 'danger')
+        flash('Already loged in', 'bad')
         return redirect('/patientDashboard')
 
     if request.method == 'POST':
@@ -90,12 +89,12 @@ def patientlogin():
                 uid = data['pid']
 
                 session['user'] = uid
-                flash('Successfully logged in', 'success')
+                flash('Successfully logged in', 'good')
                 return redirect('/patientDashboard')
             else:
-                flash('Invalid Password', 'danger')
+                flash('Invalid Password', 'bad')
         else:
-            flash('User not Found', 'danger')
+            flash('User not Found', 'bad')
 
     return render_template('patientLogin.html', navless=True)
 
@@ -104,7 +103,7 @@ def patientlogin():
 def staffRegister():
 
     if 'staff' in session:
-        flash('Already loged in', 'danger')
+        flash('Already loged in', 'good')
         return redirect('/staffDashboard')
 
     if request.method == 'POST':
@@ -114,7 +113,7 @@ def staffRegister():
         mailtest = fetchone(
             mysql, "select sid from staff where email = '{}'".format(email))
         if mailtest:
-            return "Email already registrer"
+            flash("Email already registered", 'bad')
         password = request.form['password']
         pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
         number = request.form['number']
@@ -130,16 +129,16 @@ def staffRegister():
             mysql, "select sid from staff where email = '{}'".format(email))
         if uid:
             session['staff'] = uid['sid']
-            print(uid)
-        return redirect('/')
+            flash("successfully Registered", 'good')
+        return redirect('/staffDashboard')
 
     return render_template('StaffRegister.html', navless=True)
 
 
 @app.route('/staffLogin', methods=['GET', 'POST'])
 def stafflogin():
-    if 'staff' in session:
-        flash('Already loged in', 'danger')
+    if 'user' in session:
+        flash('Already loged in', 'bad')
         return redirect('/staffDashboard')
 
     if request.method == 'POST':
@@ -151,13 +150,17 @@ def stafflogin():
         if data:
             password = data['password']
             uid = data['sid']
-            session['staff'] = uid
-            flash('Successfully logged in', 'success')
-            return redirect('/staffDashboard')
+            if bcrypt.check_password_hash(password, passcode):
+                password = data['password']
+                uid = data['pid']
+
+                session['staff'] = uid
+                flash('Successfully logged in', 'good')
+                return redirect('/staffDashboard')
         else:
-            flash('Invalid Password', 'danger')
+            flash('Invalid Password', 'bad')
     else:
-        flash('User not Found', 'danger')
+        flash('User not Found', 'bad')
 
     return render_template('staffLogin.html', navless=True)
 
@@ -168,21 +171,26 @@ def logout():
     if('user' in session.keys()):
         if 'user' in session:
             session.pop('user')
+            flash("Successfully logged out", 'good')
             return redirect('/')
         if 'user' not in session:
+            flash("Not logged in", 'bad')
             return redirect('/')
 
     if('staff' in session.keys()):
         if 'staff' in session:
             session.pop('staff')
+            flash("Successfully logged out", 'good')
             return redirect('/')
         if 'staff' not in session:
+            flash("Not logged in", 'bad')
             return redirect('/')
     
 
 @app.route('/staffDashboard')
 def staffDashboard():
     if 'staff' not in session:
+        flash('Not Logged in', 'bad')
         return redirect("/staffLogin")
     data = fetchone(
         mysql, "select * from staff where sid = {}".format(session['staff']))
@@ -191,7 +199,8 @@ def staffDashboard():
 
 @app.route('/patientDashboard')
 def patientDashboard():
-    if 'user' not in session:
+    if 'user'  not in session:
+        flash('Not Logged in', 'bad')
         return redirect("/patientLogin")
     patientData = fetchone(
         mysql, "select * from patient where pid = {}".format(session['user']))
@@ -204,6 +213,7 @@ def patientDashboard():
 @app.route('/staffAddVitals', methods=['GET', 'POST'])
 def staffAddVitals():
     if 'staff' not in session:
+        flash('Not Logged in', 'bad')
         return redirect('/staffLogin')
     if request.method == 'POST':
         pid = request.form['pid']
@@ -223,6 +233,8 @@ def staffAddVitals():
 @app.route('/appointments', methods=['GET', 'POST'])
 def appointments():
     if "user" not in session:
+        flash('Not Logged in', 'bad')
+
         return redirect("/patientLogin")
 
     if request.method == 'POST':
@@ -237,6 +249,8 @@ def appointments():
 @app.route('/appointment/<sid>/<date>/<time>', methods=['GET', 'POST'])
 def appointment(sid, date, time):
     if "user" not in session:
+        flash('Not Logged in', 'bad')
+
         return redirect("/patientLogin")
     appointmentData = fetchone(
         mysql, "select * from appointments where sid = {} and date_time = '{} {}'".format(sid, date, time))
@@ -247,6 +261,8 @@ def appointment(sid, date, time):
 @app.route('/bookAppointment/<sid>/<date>/<time>')
 def bookAppointment(sid, date, time):
     if "user" not in session:
+        flash('Not Logged in', 'bad')
+
         return redirect("/patientLogin")
     insert(mysql, "insert into appointments(sid, pid, date_time) values({},{},'{} {}');".format(
         sid, session['user'], date, time))
@@ -256,6 +272,9 @@ def bookAppointment(sid, date, time):
 @app.route('/store', methods=['GET', 'POST'])
 def store():
     if "user" not in session:
+        flash('Not Logged in', 'bad')
+
+
         return redirect("/patientLogin")
 
     items = fetchall(mysql, "select * from store")
@@ -283,12 +302,16 @@ def store():
 def storeRedirect(itemid, qty):
     insert(mysql, "insert into cart(item_id, pid, pqty) values({},{},{})".format(
         itemid, session['user'], qty))
+    flash('Added Successfully', 'good')
+    
     return redirect('/store')
 
 
 @app.route('/cart', methods=['GET', 'POST'])
 def cart():
     if "user" not in session:
+        flash('Not Logged in', 'bad')
+
         return redirect("/patientLogin")
 
     items = fetchall(
@@ -302,7 +325,7 @@ def cart():
 
     if request.method == 'POST':
         item_id = request.form['item_id']
-        delete_item = delete(mysql, 'delete from cart where item_id = {} and pid = {}'.format(
+        delete(mysql, 'delete from cart where item_id = {} and pid = {}'.format(
             item_id, session['user']))
         return redirect(url_for('cart'))
 
