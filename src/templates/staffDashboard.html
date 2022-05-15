@@ -7,23 +7,66 @@
 {% endblock %}
 <!-- body -->
 {% block body %}
-<div class="forms">
-    <h2>
-        Hey, {{data['name']}}
-    </h2>
-    <hr>
-    <p>
-        Your current information
-    </p>
-    <p>
-        Designation :- {{data['desg']}}
-    </p>
-    <p>
-        Address :- {{data['address']}}
-    </p>
-    <p>
-        Phone Number :- {{data['number']}}
-    </p>
+<div class="dashrow">
+    <div class="forms">
 
+        <h2>
+            Hey, {{data[1]['name']}}
+        </h2>
+        <hr>
+        <br>
+        <h4>
+            Your current patients
+        </h4>
+        <table>
+            <tr>
+                <th>
+                    App Id
+                </th>
+                <th>
+                    Patient Name
+                </th>
+                <th>
+                    stats
+                </th>
+            </tr>{% for patient in data[2] %}
+            <tr>
+                <td>{{patient['pid']}}</td>
+                <td>{{patient['name']}}</td>
+                <td>
+                    <a style="color: #d90427dc" href="/patientStat/{{patient['pid']}}">View stats</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+
+    <div class="appointmentTable">
+        <h2>
+            Appointments
+        </h2>
+        <hr> <br>
+        <table>
+            <tr>
+                <th>
+                    App Id
+                </th>
+                <th>
+                    Patient Name
+                </th>
+                <th>
+                    Time
+                </th>
+            </tr>{% for appointment in data[0] %}
+            <tr>
+                <td>{{appointment['app_id']}}</td>
+                <td>{{appointment['name']}}</td>
+                <td>{{appointment['date_time']}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </div>
 </div>
 {% endblock %}

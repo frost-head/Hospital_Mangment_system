@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, redirect, render_template, request, flash, session, url_for
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
@@ -149,10 +150,9 @@ def stafflogin():
 
         if data:
             password = data['password']
-            uid = data['sid']
             if bcrypt.check_password_hash(password, passcode):
                 password = data['password']
-                uid = data['pid']
+                uid = data['sid']
 
                 session['staff'] = uid
                 flash('Successfully logged in', 'good')
@@ -189,11 +189,20 @@ def logout():
 
 @app.route('/staffDashboard')
 def staffDashboard():
-    if 'staff' not in session:
-        flash('Not Logged in', 'bad')
-        return redirect("/staffLogin")
-    data = fetchone(
-        mysql, "select * from staff where sid = {}".format(session['staff']))
+    # if 'staff' not in session:
+    #     flash('Not Logged in', 'bad')
+    #     return redirect("/staffLogin")
+    session['staff'] = 1
+    appointments = fetchall(
+        mysql, """select staff.sid, staff.name, desg, app_id, patient.pid, date_time, patient.name from staff inner join appointments, patient where staff.sid = appointments.sid = {} and patient.pid = appointments.pid and date_time >= '{}' order by date_time asc""".format(session['staff'],datetime.now()))
+    print(appointments)
+
+    personal = fetchone(mysql, "select * from staff where sid = {}".format(session['staff']))
+
+    pateint = fetchall(mysql,"select * from patient where sid = 1;")
+
+    data = [appointments, personal, pateint]
+
     return render_template('staffDashboard.html', data=data)
 
 
@@ -335,6 +344,11 @@ def cart():
 @app.route("/payment")
 def payment():
     return render_template('payment.html')
+
+@app.route("/patientStat/<pid>")
+def patientStat(pid):
+    data = fetchall(mysql,"select * from patient where pid = {}".format(pid))
+    return render_template('Stats.html', data=data)
 
 
 app.run(debug=True, host='0.0.0.0')

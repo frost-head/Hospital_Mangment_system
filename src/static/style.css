@@ -150,7 +150,6 @@ nav {
     justify-content: space-between;
     align-items: baseline;
     align-content: center;
-    margin-top: 40px;
 }
 
 .store h2 {
@@ -189,7 +188,6 @@ nav {
 }
 
 .box {
-    width: 30vw;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -199,7 +197,7 @@ nav {
 /* forms */
 
 .forms {
-    padding: 50px;
+    padding: 40px;
     border-radius: 15px;
     margin: 50px 0px;
     box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.178);
@@ -746,4 +744,43 @@ header span {
 .message button {
     border: none;
     font-weight: bolder;
+}
+
+table {
+    text-align: center;
+    border: 0px;
+}
+
+th {
+    margin: 10px;
+    padding: 10px;
+    background-color: #d90427dc;
+    color: #EDF2F4;
+}
+
+tr,
+td {
+    border: #d90427dc 1px solid;
+}
+
+td {
+    padding: 8px;
+}
+
+.dashrow {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.appointmentTable {
+    flex: 0.9;
+    margin-top: 50px;
+    padding: 40px;
+    box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.178);
+    border-radius: 15px;
+    height: 80vh;
+    overflow-y: scroll;
 }
