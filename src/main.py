@@ -205,8 +205,8 @@ def patientDashboard():
         mysql, "select * from patient where pid = {}".format(session['user']))
     vitalsData = fetchall(
         mysql, "select * from vitals where pid = {}".format(session['user']))
-    print(vitalsData)
-    return render_template('patientDashboard.html', patientData=patientData, vitalsData=vitalsData)
+    appointments = fetchall(mysql, """select patient.pid, patient.email, patient.name, patient.number, patient.age, app_id, staff.sid , date_time, staff.name  from patient inner join appointments, staff where patient.pid = appointments.pid = {} and appointments.sid = staff.sid order by date_time asc""".format(session['user']))
+    return render_template('patientDashboard.html', patientData=patientData, vitalsData=vitalsData, appointments=appointments)
 
 
 @app.route('/staffAddVitals', methods=['GET', 'POST'])
