@@ -247,6 +247,13 @@ form .button {
     justify-content: center;
 }
 
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 form .button {
     border-radius: 15px;
 }
@@ -764,7 +771,7 @@ td {
 }
 
 td {
-    padding: 8px;
+    padding: 8 px;
 }
 
 .dashrow {
@@ -776,11 +783,11 @@ td {
 }
 
 .appointmentTable {
-    flex: 0.9;
+    flex: 0.8;
     margin-top: 50px;
     padding: 40px;
     box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.178);
     border-radius: 15px;
-    height: 80vh;
+    max-height: 80vh;
     overflow-y: scroll;
 }

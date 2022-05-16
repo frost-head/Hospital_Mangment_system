@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from flask import Flask, redirect, render_template, request, flash, session, url_for
 from flask_mysqldb import MySQL
@@ -43,21 +44,10 @@ def patientRegister():
 
         password = request.form['password']
         pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-        if request.form['bloodG']:
-            bloodG = request.form['bloodG']
-        else:
-            bloodG = 'N/A'
-        if request.form['fatherN']:
-            fatherN = request.form['fatherN']
-        else:
-            fatherN = 'N/A'
-        if request.form['address']:
-            address = request.form['address']
-        else:
-            address = 'N/A'
+        
 
-        insert(mysql, "insert into patient(email, password, name, number, address, blood_group, father_name, age) values('{}', '{}','{}','{}','{}','{}','{}','{}')".format(
-            email, pw_hash, name, number,  address, bloodG, fatherN, age))
+        insert(mysql, "insert into patient(email, password, name, number, age) values('{}', '{}','{}','{}','{}')".format(
+            email, pw_hash, name, number, age))
 
         uid = fetchone(
             mysql, "select pid from patient where email = '{}'".format(email))
@@ -232,7 +222,7 @@ def staffAddVitals():
         rr = request.form['rr']
         spo2 = request.form['spo2']
         weight = request.form['weight']
-        sid = session['user']
+        sid = session['staff']
         insert(mysql, "insert into vitals(pid, temp, pulse,  blood_pressure, resp_rate, spo2, sid, weight) values({},{},{},{},{},{},{},{})".format(
             pid, temp, pulse, bp, rr, spo2, sid, weight))
         return redirect('/staffDashboard')
@@ -347,8 +337,27 @@ def payment():
 
 @app.route("/patientStat/<pid>")
 def patientStat(pid):
-    data = fetchall(mysql,"select * from patient where pid = {}".format(pid))
-    return render_template('Stats.html', data=data)
+    data = fetchall(mysql,"select * from vitals where vitals.pid =  {}".format(pid))
+    pdata = fetchone(mysql, "select * from patient where pid ={}".format(pid))
+    temps = []
+    bp = []
+    resp = []
+    spo2 = []
+    weight = []
+    label = []
+    for vital in data:
+        temps.append(int(vital['temp'])) 
+        bp.append(vital['blood_pressure'])
+        resp.append(vital['resp_rate'])
+        spo2.append(vital['spo2']) 
+        weight.append(vital['weight'])
+        date = vital['datetime']
+        
+        label.append(date)
+
+    # data = [bp, label]
+
+    return render_template('Stats.html', data=data, pdata=pdata)
 
 
 app.run(debug=True, host='0.0.0.0')

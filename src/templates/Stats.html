@@ -7,7 +7,155 @@
 {% endblock %}
 <!-- body -->
 {% block body %}
-<div class="forms">
+<div class="center">
+    <div style="width: 80%; margin-top:50px">
+        <h2>
+            Name : {{pdata['name']}}
+        </h2>
+        <p>
+            Age : {{pdata['age']}}
+        </p>
+        <p>
+            Phone Number: {{pdata['number']}}
+        </p>
+        <hr>
+    </div>
+    <div class="forms">
+        <div>
+            <canvas id="bloodpressure">
 
+        </canvas>
+        </div>
+
+    </div>
+    <div class="forms">
+        <div>
+            <canvas id="pulse">
+
+        </canvas>
+        </div>
+    </div>
+    <div class="forms">
+        <div>
+            <canvas id="spo2">
+
+        </canvas>
+        </div>
+    </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    function bloodpressure(vdata) {
+        vdata = JSON.parse(vdata)
+        lables = []
+        Data = []
+
+        for (i in vdata) {
+            let date = new Date(vdata[i]['datetime']);
+            lables[i] = date.getDate() + "/" + date.getMonth()
+            Data[i] = Number(vdata[i]['blood_pressure'])
+
+        }
+        console.log(Data)
+        const data = {
+            labels: lables,
+
+            datasets: [{
+                label: 'Blood  Pressure',
+                backgroundColor: '#d90427dc',
+                borderColor: "#d90427dc",
+                data: Data,
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {}
+        };
+        const bloodpressure = document.getElementById('bloodpressure').getContext('2d')
+        const myChart = new Chart(
+            bloodpressure,
+            config
+        );
+    }
+    bloodpressure('{{data|tojson}}');
+
+    function pulse(vdata) {
+        vdata = JSON.parse(vdata)
+        lables = []
+        Data = []
+
+        for (i in vdata) {
+            let date = new Date(vdata[i]['datetime']);
+            lables[i] = date.getDate() + "/" + date.getMonth()
+            Data[i] = Number(vdata[i]['pulse'])
+
+        }
+        console.log(Data)
+        const data = {
+            labels: lables,
+
+            datasets: [{
+                label: 'pulse',
+                backgroundColor: '#00960ddc',
+                borderColor: "#00960ddc",
+                fill: '#00960ddc',
+                data: Data,
+
+            }]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {}
+        };
+        const pulse = document.getElementById('pulse').getContext('2d')
+        const myChart = new Chart(
+            pulse,
+            config
+        );
+    }
+    pulse('{{data|tojson}}');
+
+    function spo2(vdata) {
+        vdata = JSON.parse(vdata)
+        lables = []
+        Data = []
+
+        for (i in vdata) {
+            let date = new Date(vdata[i]['datetime']);
+            lables[i] = date.getDate() + "/" + date.getMonth()
+            Data[i] = Number(vdata[i]['spo2'])
+
+        }
+        console.log(Data)
+        const data = {
+            labels: lables,
+
+            datasets: [{
+                label: 'spo2',
+                backgroundColor: '#0444d9dc',
+                borderColor: "#0444d9dc",
+                fill: '#0444d9dc',
+                data: Data,
+
+            }]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {}
+        };
+        const spo2 = document.getElementById('spo2').getContext('2d')
+        const myChart = new Chart(
+            spo2,
+            config
+        );
+    }
+    spo2('{{data|tojson}}');
+</script>
 {% endblock %}
