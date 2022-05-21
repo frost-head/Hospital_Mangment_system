@@ -13,6 +13,8 @@
 <body>
     {% include '/includes/navbar.html' %} {% block bBody %} {% endblock %}
     <div class="body ">{% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for categories, message in messages %} {% include '/includes/message.html' %} {% endfor %} {% endif %} {% endwith %} {% block body %} {% endblock %}</div>
+
 </body>
+{% block footer %} {% endblock %}
 
 </html>

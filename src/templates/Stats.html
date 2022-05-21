@@ -22,7 +22,7 @@
     </div>
     <div class="forms">
         <div>
-            <canvas id="bloodpressure">
+            <canvas id="bloodpressure" style="position: relative; height:100vh; width: 100vw">
 
         </canvas>
         </div>
@@ -148,7 +148,9 @@
         const config = {
             type: 'line',
             data: data,
-            options: {}
+            options: {
+
+            }
         };
         const spo2 = document.getElementById('spo2').getContext('2d')
         const myChart = new Chart(

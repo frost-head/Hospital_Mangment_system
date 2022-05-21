@@ -736,6 +736,8 @@ header span {
     align-content: center;
     flex-direction: row;
     align-items: center;
+    position: absolute;
+    top: 0px;
 }
 
 .message-bad {
