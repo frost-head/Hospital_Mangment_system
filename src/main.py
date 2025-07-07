@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 from flask import Flask, redirect, render_template, request, flash, session
-from flaskext.mysql import MySQL
+from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import os
 from database import *
@@ -10,8 +10,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-mysql = MySQL(app, autocommit=True )
+mysql = MySQL(app )
 bcrypt = Bcrypt(app)
+
+print("User:", os.environ.get("Mysql_user"))
+print("Pass:", os.environ.get("Mysql_pass"))
+
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = os.environ.get("Mysql_user")
