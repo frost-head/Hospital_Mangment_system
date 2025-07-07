@@ -160,17 +160,26 @@ DROP TABLE IF EXISTS `vitals`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vitals` (
-  `pid` int NOT NULL,
-  `temp` int DEFAULT NULL,
-  `pulse` int DEFAULT NULL,
-  `blood_pressure` int DEFAULT NULL,
-  `resp_rate` int DEFAULT NULL,
-  `spo2` int DEFAULT NULL,
-  `datetime` datetime DEFAULT NULL,
-  `sid` int DEFAULT NULL,
-  `weight` int DEFAULT NULL,
-  PRIMARY KEY (`pid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `vid`            INT         NOT NULL AUTO_INCREMENT,
+  `pid`           INT         NOT NULL,
+  `temp`          INT         DEFAULT NULL,
+  `pulse`         INT         DEFAULT NULL,
+  `blood_pressure` INT        DEFAULT NULL,
+  `resp_rate`     INT         DEFAULT NULL,
+  `spo2`          INT         DEFAULT NULL,
+  `weight`        INT         DEFAULT NULL,
+  `datetime`      DATETIME    DEFAULT CURRENT_TIMESTAMP,
+  `sid`           INT         DEFAULT NULL,
+  PRIMARY KEY (`vid`),
+  KEY `idx_vitals_pid` (`pid`),
+  CONSTRAINT `fk_vitals_patient`
+    FOREIGN KEY (`pid`)
+    REFERENCES `patient` (`pid`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
