@@ -1,14 +1,16 @@
 import json
 from datetime import datetime
-from flask import Flask, redirect, render_template, request, flash, session, url_for
-from flask_mysqldb import MySQL
+from flask import Flask, redirect, render_template, request, flash, session
+from flaskext.mysql import MySQL
 from flask_bcrypt import Bcrypt
 import os
 from database import *
+from dotenv import load_dotenv
 
+load_dotenv()
 
 app = Flask(__name__)
-mysql = MySQL(app)
+mysql = MySQL(app, autocommit=True )
 bcrypt = Bcrypt(app)
 
 app.config['MYSQL_HOST'] = 'localhost'
@@ -326,7 +328,7 @@ def cart():
         item_id = request.form['item_id']
         delete(mysql, 'delete from cart where item_id = {} and pid = {}'.format(
             item_id, session['user']))
-        return redirect(url_for('cart'))
+        return redirect("/cart")
 
     return render_template('cart.html', items=items, amount=amount, count=count)
 

@@ -1,6 +1,7 @@
 
 def fetchall(mysql, querry):
-    cur = mysql.connection.cursor()
+    # cur =mysql.connect.cursor()
+    cur = mysql.get_db().cursor()
     cur.execute("{}".format(querry))
     data = cur.fetchall()
     cur.close()
@@ -8,7 +9,8 @@ def fetchall(mysql, querry):
 
 
 def fetchone(mysql, querry):
-    cur = mysql.connection.cursor()
+    cur = mysql.get_db().cursor()
+    # cur =mysql.connect.cursor()
     cur.execute("{}".format(querry))
     data = cur.fetchone()
     cur.close()
@@ -16,22 +18,25 @@ def fetchone(mysql, querry):
 
 
 def insert(mysql, querry):
-    cur = mysql.connection.cursor()
+    cur = mysql.get_db().cursor()
+    # cur =mysql.connect.cursor()
     cur.execute("{}".format(querry))
-    mysql.connection.commit()
+    # mysql.connect.commit()
     cur.close()
     return
 
 def delete(mysql, querry):
-    cur = mysql.connection.cursor()
+    cur = mysql.get_db().cursor()
+    # cur =mysql.connect.cursor()
     cur.execute("{}".format(querry))
-    mysql.connection.commit()
+    # mysql.connect.commit()
     cur.close()
     return
 
 def update(mysql, querry):
-    cur = mysql.connection.cursor()
+    cur = mysql.get_db().cursor()
+    # cur =mysql.connect.cursor()
     cur.execute("{}".format(querry))
-    mysql.connection.commit()
+    # mysql.connect.commit()
     cur.close()
     return
