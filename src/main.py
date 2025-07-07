@@ -20,7 +20,7 @@ print("Pass:", os.environ.get("Mysql_pass"))
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = os.environ.get("Mysql_user")
 app.config['MYSQL_PASSWORD'] = os.environ.get("Mysql_pass")
-app.config['MYSQL_DB'] = 'hospital_managment'
+app.config['MYSQL_DB'] = 'hospital_management'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = os.urandom(24)
@@ -185,17 +185,38 @@ def logout():
 
 @app.route('/staffDashboard')
 def staffDashboard():
-    # if 'staff' not in session:
-    #     flash('Not Logged in', 'bad')
-    #     return redirect("/staffLogin")
-    session['staff'] = 1
-    appointments = fetchall(
-        mysql, """select staff.sid, staff.name, desg, app_id, patient.pid, date_time, patient.name from staff inner join appointments, patient where staff.sid = appointments.sid = {} and patient.pid = appointments.pid and date_time >= '{}' order by date_time asc""".format(session['staff'],datetime.now()))
+    if 'staff' not in session:
+        flash('Not Logged in', 'bad')
+        return redirect("/staffLogin")
+    # session['staff'] = 1
+    # appointments = fetchall(
+        # mysql, """select staff.sid, staff.name, desg, app_id, patient.pid, date_time, patient.name from staff inner join appointments, patient where staff.sid = appointments.sid = {} and patient.pid = appointments.pid and date_time >= '{}' order by date_time asc""".format(session['staff'],datetime.now()))
+    appointments = fetchall(mysql, """
+    SELECT s.sid, s.name, s.desg, a.app_id, p.pid, a.date_time, p.name AS patient_name
+    FROM staff s
+    JOIN appointments a ON s.sid = a.sid
+    JOIN patient p ON p.pid = a.pid
+    WHERE s.sid = %s AND a.date_time >= %s
+    ORDER BY a.date_time ASC
+""", (session['staff'], datetime.now()))
+
     print(appointments)
 
     personal = fetchone(mysql, "select * from staff where sid = {}".format(session['staff']))
 
-    pateint = fetchall(mysql,"select * from patient where sid = 1;")
+    # pateint = fetchall(mysql,"select * from patient where sid = 1;")
+    pateint = fetchall(mysql, """
+    SELECT p.*
+    FROM patient AS p
+    JOIN appointments AS a ON p.pid = a.pid
+    WHERE a.sid = %s
+""", (session['staff'],))
+
+    print(personal)
+    print(pateint)
+    print(appointments)
+
+    print(session['staff'])
 
     data = [appointments, personal, pateint]
 
@@ -297,8 +318,10 @@ def store():
 
     if request.method == 'POST' and 'search' in request.form:
         search_name = request.form['search']
-        items = fetchall(
-            mysql, "select * from store where name like '%{}%'".format(search_name))
+        sql   = "SELECT * FROM store WHERE name LIKE %s"
+        param = f"%{search_name}%"
+        items = fetchall(mysql, sql, (param,))
+
 
     return render_template('store.html', items=items)
 

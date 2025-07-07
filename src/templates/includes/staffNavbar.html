@@ -5,9 +5,10 @@
         </div>
 
     </a>
-    {% if navless == Flase %} {% if 'user' in session %}
+    {% if navless == Flase %} {% if 'staff' in session %}
     <div class="navlinks">
-        <a href="#">Dashboard</a>
+        <a href="/staffDashboard">Dashboard</a>
+        <a href="/staffAddVitals">Add Vitals</a>
         <a href="/logout">Logout</a>
     </div>{% endif %} {% else %}
     <div class="navlinks">
