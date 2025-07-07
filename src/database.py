@@ -1,13 +1,13 @@
-def fetchall(mysql, query):
+def fetchall(mysql, query, params=None):
     cur = mysql.connection.cursor()
-    cur.execute(query)
+    cur.execute(query, params or ())
     data = cur.fetchall()
     cur.close()
     return data
 
-def fetchone(mysql, query):
+def fetchone(mysql, query, params=None):
     cur = mysql.connection.cursor()
-    cur.execute(query)
+    cur.execute(query, params or ())
     data = cur.fetchone()
     cur.close()
     return data

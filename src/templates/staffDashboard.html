@@ -21,7 +21,7 @@
         <table>
             <tr>
                 <th>
-                    App Id
+                    Patient Id
                 </th>
                 <th>
                     Patient Name
@@ -50,7 +50,7 @@
         <table>
             <tr>
                 <th>
-                    App Id
+                    Appointment Id
                 </th>
                 <th>
                     Patient Name
@@ -61,7 +61,7 @@
             </tr>{% for appointment in data[0] %}
             <tr>
                 <td>{{appointment['app_id']}}</td>
-                <td>{{appointment['name']}}</td>
+                <td>{{appointment['patient_name']}}</td>
                 <td>{{appointment['date_time']}}</td>
             </tr>
             {% endfor %}
