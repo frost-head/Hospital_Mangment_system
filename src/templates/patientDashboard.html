@@ -10,44 +10,32 @@
 <div class="dashrow">
     <div>
         <div class="forms">
-            <h2>
-                Hey, {{patientData['name']}}
-            </h2>
+            <h2>Hey, {{patientData.name}}</h2>
             <hr>
-            <p>
-                Your current information
-            </p>
-            <p>
-                Patient Id :- {{patientData['pid']}}
-            </p>
-            <p>
-                Age :- {{patientData['age']}}
-            </p>
+            <p>Your Info</p>
+            <p>Patient Id: {{patientData.pid}}</p>
+            <p>Age: {{patientData.age}}</p>
         </div>
-        <h2>
-            Your vitals
-        </h2>
+
+        <div class="forms">
+            <h2>Health Summary</h2>
+            <p><em>Last updated: {{ last_updated }}</em></p>
+            <div class="summary-box">
+                {{ summary|md2html|safe }}
+            </div>
+        </div>
+
+        <h2>Your vitals</h2>
         <hr>
-        <div class="forms">
-            <div>
-                <canvas id="bloodpressure">
 
-                </canvas>
-            </div>
+        <div class="forms">
+            <canvas id="bloodpressure"></canvas>
         </div>
         <div class="forms">
-            <div>
-                <canvas id="pulse">
-
-        </canvas>
-            </div>
+            <canvas id="pulse"></canvas>
         </div>
         <div class="forms">
-            <div>
-                <canvas id="spo2">
-
-        </canvas>
-            </div>
+            <canvas id="spo2"></canvas>
         </div>
     </div>
     <DIV style="width:30vw">

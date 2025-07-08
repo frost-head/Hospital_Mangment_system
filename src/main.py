@@ -6,6 +6,8 @@ from flask_bcrypt import Bcrypt
 import os
 from database import *
 from dotenv import load_dotenv
+import requests
+from markdown import markdown
 
 load_dotenv()
 
@@ -233,8 +235,21 @@ def patientDashboard():
     vitalsData = fetchall(
         mysql, "select * from vitals where pid = {}".format(session['user']))
     appointments = fetchall(mysql, """select patient.pid, patient.email, patient.name, patient.number, patient.age, app_id, staff.sid , date_time, staff.name  from patient inner join appointments, staff where patient.pid = appointments.pid = {} and appointments.sid = staff.sid order by date_time asc""".format(session['user']))
-    return render_template('patientDashboard.html', patientData=patientData, vitalsData=vitalsData, appointments=appointments)
+    summary_row = fetchone(mysql,
+        "SELECT summary, updated_at FROM patient_summary WHERE pid = %s",
+        (session['user'],)
+    )
+    summary = summary_row['summary'] if summary_row else "No summary yet."
+    last_updated = summary_row['updated_at'] if summary_row else None
 
+    return render_template(
+        'patientDashboard.html',
+        patientData=patientData,
+        vitalsData=vitalsData,
+        appointments=appointments,
+        summary=summary,
+        last_updated=last_updated
+    )
 
 @app.route('/staffAddVitals', methods=['GET', 'POST'])
 def staffAddVitals():
@@ -242,18 +257,112 @@ def staffAddVitals():
         flash('Not Logged in', 'bad')
         return redirect('/staffLogin')
     if request.method == 'POST':
-        pid = request.form['pid']
-        temp = request.form['temp']
-        pulse = request.form['pulse']
-        bp = request.form['bp']
-        rr = request.form['rr']
-        spo2 = request.form['spo2']
-        weight = request.form['weight']
-        sid = session['staff']
-        insert(mysql, "insert into vitals(pid, temp, pulse,  blood_pressure, resp_rate, spo2, sid, weight) values({},{},{},{},{},{},{},{})".format(
-            pid, temp, pulse, bp, rr, spo2, sid, weight))
+        # 1) insert the new vital record
+        pid     = request.form['pid']
+        temp    = request.form['temp']
+        pulse   = request.form['pulse']
+        bp      = request.form['bp']
+        rr      = request.form['rr']
+        spo2    = request.form['spo2']
+        weight  = request.form['weight']
+        sid     = session['staff']
+
+        insert(mysql,
+            "INSERT INTO vitals "
+            "(pid, temp, pulse, blood_pressure, resp_rate, spo2, weight, sid) "
+            "VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+            (pid, temp, pulse, bp, rr, spo2, weight, sid)
+        )
+
+        # 2) fetch the newly inserted vitals (you could also build your own string)
+        new_vitals = fetchone(mysql,
+            "SELECT temp,pulse,blood_pressure,resp_rate,spo2,weight,datetime "
+            "FROM vitals WHERE vid = LAST_INSERT_ID()"
+        )
+
+        # 3) assemble prompt: include prior summary
+        existing = fetchone(mysql,
+            "SELECT summary FROM patient_summary WHERE pid = %s", (pid,)
+        )
+        if existing:
+            prompt = (
+                f"Previous summary: {existing['summary']}\n"
+                f"New vitals: {new_vitals}\n"
+                "Update the summary noting improvements or concerns."
+            )
+            updated = call_gemini(prompt)
+            # update row
+            update(mysql,
+                "UPDATE patient_summary SET summary=%s, updated_at=NOW() WHERE pid=%s",
+                (updated, pid)
+            )
+        else:
+            prompt = f"New vitals for patient {pid}: {new_vitals}\nProvide a concise summary."
+            initial = call_gemini(prompt)
+            insert(mysql,
+                "INSERT INTO patient_summary(pid, summary) VALUES (%s,%s)",
+                (pid, initial)
+            )
+
         return redirect('/staffDashboard')
     return render_template('staffAddVitals.html')
+
+@app.template_filter('md2html')
+def md2html(text):
+    return markdown(text)
+
+GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
+
+def call_gemini(prompt: str) -> str:
+    headers = {
+        "Content-Type": "application/json",
+        "X-goog-api-key": GEMINI_KEY
+    }
+    body = {"contents":[{"parts":[{"text":prompt}]}]}
+    resp = requests.post(GEMINI_URL, headers=headers, json=body)
+    resp.raise_for_status()
+    data = resp.json()
+
+    # (Optional) inspect it once
+    print("=== GEMINI RESPONSE ===")
+    print(json.dumps(data, indent=2))
+
+    candidates = data.get("candidates", [])
+    if not candidates:
+        raise ValueError("No candidates in Gemini response")
+
+    first = candidates[0]
+
+    # 1) Top‑level flat content/output
+    for key in ("output", "content"):
+        if key in first and isinstance(first[key], str):
+            return first[key]
+
+    # 2) If 'content' is a dict (as in your latest test)
+    if "content" in first and isinstance(first["content"], dict):
+        content = first["content"]
+
+        # a) maybe there's a 'text' field
+        if "text" in content and isinstance(content["text"], str):
+            return content["text"]
+
+        # b) or a 'parts' list
+        parts = content.get("parts")
+        if isinstance(parts, list) and parts:
+            text = parts[0].get("text")
+            if isinstance(text, str):
+                return text
+
+    # 3) Finally, check if first itself has a 'parts' list
+    parts = first.get("parts")
+    if isinstance(parts, list) and parts:
+        text = parts[0].get("text")
+        if isinstance(text, str):
+            return text
+
+    # nothing matched
+    raise ValueError(f"Couldn't extract text from Gemini response; candidate keys were {list(first.keys())}")
 
 
 @app.route('/appointments', methods=['GET', 'POST'])
@@ -389,4 +498,5 @@ def patientStat(pid):
     return render_template('Stats.html', data=data, pdata=pdata)
 
 
-app.run(debug=True, host='0.0.0.0')
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0')
