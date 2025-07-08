@@ -12,20 +12,21 @@ def fetchone(mysql, query, params=None):
     cur.close()
     return data
 
-def insert(mysql, query):
+def insert(mysql, query, params=None):
     cur = mysql.connection.cursor()
-    cur.execute(query)
+    cur.execute(query, params or ())
     mysql.connection.commit()
     cur.close()
 
-def delete(mysql, query):
+def update(mysql, query, params=None):
     cur = mysql.connection.cursor()
-    cur.execute(query)
+    cur.execute(query, params or ())
     mysql.connection.commit()
     cur.close()
 
-def update(mysql, query):
+def delete(mysql, query, params=None):
     cur = mysql.connection.cursor()
-    cur.execute(query)
+    cur.execute(query, params or ())
     mysql.connection.commit()
     cur.close()
+

@@ -784,3 +784,16 @@ td {
   max-height: 80vh;
   overflow-y: scroll;
 }
+
+.summary-box {
+  max-height: 20rem;
+  overflow-y: auto;
+  line-height: 1.5;
+}
+.summary-box ul {
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+.summary-box li {
+  margin-bottom: 0.5rem;
+}
