@@ -324,10 +324,6 @@ def call_gemini(prompt: str) -> str:
     resp.raise_for_status()
     data = resp.json()
 
-    # (Optional) inspect it once
-    print("=== GEMINI RESPONSE ===")
-    print(json.dumps(data, indent=2))
-
     candidates = data.get("candidates", [])
     if not candidates:
         raise ValueError("No candidates in Gemini response")
@@ -343,18 +339,15 @@ def call_gemini(prompt: str) -> str:
     if "content" in first and isinstance(first["content"], dict):
         content = first["content"]
 
-        # a) maybe there's a 'text' field
         if "text" in content and isinstance(content["text"], str):
             return content["text"]
 
-        # b) or a 'parts' list
         parts = content.get("parts")
         if isinstance(parts, list) and parts:
             text = parts[0].get("text")
             if isinstance(text, str):
                 return text
 
-    # 3) Finally, check if first itself has a 'parts' list
     parts = first.get("parts")
     if isinstance(parts, list) and parts:
         text = parts[0].get("text")
